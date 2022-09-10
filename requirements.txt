@@ -1,5 +1,5 @@
 aiohttp==3.7.4.post0
-akinator.py==1.0.2
+akinator
 asyncio==3.4.3
 beautifulsoup4
 bs4==0.0.1
