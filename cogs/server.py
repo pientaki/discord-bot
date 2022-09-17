@@ -158,9 +158,9 @@ class Server(commands.Cog):
     @commands.hybrid_command(name="clear", description="送信したメッセージを消去します", with_app_command=True)    
     @app_commands.describe(amount="削除したい件数を入力して下さい")
     async def clear(self, ctx: commands.Context, amount: int):
-        await ctx.channel.purge(limit=int(amount))
-        await asyncio.sleep(1)
-        await ctx.send(f"メッセージが{amount}件分削除されました")
+        await ctx.send(f"メッセージが{amount}件分削除されます")
+        await asyncio.sleep(3)
+        await ctx.channel.purge(limit=amount)
         
 
     @commands.hybrid_command(name="ping", description="botのping値を測定します", with_app_command=True)    

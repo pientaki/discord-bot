@@ -112,7 +112,6 @@ async def on_ready():
     change_status.start()
 
 @bot.hybrid_command(name = "cmd", with_app_command = True, description = "コマンド一覧を表示")
-
 async def help_select(ctx: commands.Context):
     helpembed = discord.Embed(title="Sorrows Official Bot",color=discord.Color.blurple())
     helpembed.set_thumbnail(url=bot.user.avatar.url)
