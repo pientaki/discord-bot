@@ -90,7 +90,8 @@ class Search(commands.Cog):
             ),
         )
 
-    @commands.hybrid_command(name="imagesearch", description="画像を検索します", with_app_command=True)    
+    @commands.hybrid_command(name="imagesearch", description="画像を検索します", with_app_command=True)
+    @app_commands.rename(search="検索キーワード")    
     @app_commands.describe(search="検索したい画像名を入力して下さい")
     async def image(self, ctx: commands.Context, *, search: str):
         t_delta = datetime.timedelta(hours=9)
@@ -106,7 +107,8 @@ class Search(commands.Cog):
         embed.set_footer(text=f"{ctx.author.name}のリクエスト")
         await ctx.send(embed=embed)
 
-    @commands.hybrid_command(name="wiki", description="wikipediaで検索します", with_app_command=True)    
+    @commands.hybrid_command(name="wiki", description="wikipediaで検索します", with_app_command=True)
+    @app_commands.rename(search="検索キーワード")    
     @app_commands.describe(search="検索ワードを入力して下さい")
     async def wiki(self, ctx: commands.Context, search: str):
         wikipedia.set_lang("ja")
