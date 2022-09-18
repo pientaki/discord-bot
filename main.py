@@ -12,7 +12,7 @@ class Bot(commands.Bot):
         intents = discord.Intents.default()
         intents.message_content = True
         intents.members = True
-        super().__init__(command_prefix = prefixes, intents = intents)
+        super().__init__(command_prefix = prefixes, intents = intents, help_command=False)
 
     async def setup_hook(self):
         for filename in os.listdir('./cogs'):
@@ -111,7 +111,7 @@ async def change_status():
 async def on_ready():
     change_status.start()
 
-@bot.hybrid_command(name = "cmd", with_app_command = True, description = "コマンド一覧を表示")
+@bot.hybrid_command(name = "help", with_app_command = True, description = "コマンド一覧を表示")
 async def help_select(ctx: commands.Context):
     helpembed = discord.Embed(title="Sorrows Official Bot",color=discord.Color.blurple())
     helpembed.set_thumbnail(url=bot.user.avatar.url)

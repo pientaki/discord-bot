@@ -1,3 +1,4 @@
+from turtle import title
 import discord
 from discord.ext import commands
 from discord import app_commands
@@ -71,7 +72,8 @@ class Search(commands.Cog):
         for url in search(kensaku, lang="jp",num_results = 5):
             await ctx.send(url)
 
-    @commands.hybrid_command(name="search", description="インターネットの検索結果のリンクを生成します", with_app_command=True)    
+    @commands.hybrid_command(name="search", description="インターネットの検索結果のリンクを生成します", with_app_command=True)
+    @app_commands.rename(word="検索ワード")    
     @app_commands.describe(word="検索ワードを入力して下さい")
     async def isearch(self, ctx: commands.Context, *, word: str):
         param = parse.urlencode({"q": word})
@@ -91,7 +93,7 @@ class Search(commands.Cog):
         )
 
     @commands.hybrid_command(name="imagesearch", description="画像を検索します", with_app_command=True)
-    @app_commands.rename(search="検索キーワード")    
+    @app_commands.rename(search="検索ワード")   
     @app_commands.describe(search="検索したい画像名を入力して下さい")
     async def image(self, ctx: commands.Context, *, search: str):
         t_delta = datetime.timedelta(hours=9)
@@ -108,7 +110,7 @@ class Search(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.hybrid_command(name="wiki", description="wikipediaで検索します", with_app_command=True)
-    @app_commands.rename(search="検索キーワード")    
+    @app_commands.rename(search="検索ワード")    
     @app_commands.describe(search="検索ワードを入力して下さい")
     async def wiki(self, ctx: commands.Context, search: str):
         wikipedia.set_lang("ja")
@@ -229,6 +231,14 @@ class Search(commands.Cog):
             #embed.set_thumbnail(url="https://www.apsf.org/wp-content/uploads/newsletters/2020/3502/coronavirus-covid-19.png")
             #embed.description=(text)
             #await ctx.send(embed=embed)
+
+    @commands.hybrid_command(name="embed", description="埋め込みメッセージを作成します", with_app_command=True)
+    @app_commands.rename(title="タイトル", description="内容")    
+    @app_commands.describe(title="タイトルを入力して下さい", description="内容を入力して下さい")
+    async def make_embed(self, ctx: commands.Context, title: str, description: str):
+        embed=discord.Embed(title=title, description=description, color=ctx.author.color)
+        await ctx.send(embed=embed)
+
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Search(bot))

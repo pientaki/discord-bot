@@ -56,7 +56,8 @@ class Server(commands.Cog):
 
         await ctx.send(embeds=embeds)
 
-    @commands.hybrid_command(name="user-info", description="ユーザー情報を表示", with_app_command=True)    
+    @commands.hybrid_command(name="user-info", description="ユーザー情報を表示", with_app_command=True)
+    @app_commands.rename(member="メンバー")    
     @app_commands.describe(member="メンバーを選択して下さい")
     async def user_info(self, ctx: commands.Context, member: discord.Member):
         embed = discord.Embed(title=str(member), color=discord.Color.blue())
@@ -67,6 +68,7 @@ class Server(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.hybrid_command(name="kick", description="メンバーをキックします", with_app_command=True)
+    @app_commands.rename(member="メンバー", reason="理由")
     @commands.has_permissions(kick_members=True)    
     @app_commands.describe(member="メンバーを選択して下さい", reason = "キックする理由を入力して下さい")
     async def kick(self, ctx: commands.Context, member: discord.Member, reason):
@@ -80,6 +82,7 @@ class Server(commands.Cog):
             await ctx.send("あなたにはキック権限がありません")
 
     @commands.hybrid_command(name="ban", description="メンバーをBanします", with_app_command=True)
+    @app_commands.rename(member="メンバー", reason="理由")
     @commands.has_permissions(ban_members=True)    
     @app_commands.describe(member="メンバーを選択して下さい", reason = "Banする理由を入力して下さい")
     async def ban(self, ctx: commands.Context, member: discord.Member, reason):
@@ -92,7 +95,8 @@ class Server(commands.Cog):
         except Exception:
             await ctx.send("あなたにはBan権限がありません")
 
-    @commands.hybrid_command(name="timeout", description="メンバーをタイムアウトします", with_app_command=True)    
+    @commands.hybrid_command(name="timeout", description="メンバーをタイムアウトします", with_app_command=True)
+    @app_commands.rename(member="メンバー", reason="理由", days="日数", hours="時間", minutes="分",seconds="秒")    
     @app_commands.describe(member="メンバーを選択して下さい", reason = "理由を入力して下さい",days="タイムアウトする日数を入力してください(0-27)", hours="タイムアウトする時間を入力してください(0-24)", minutes="タイムアウトする分を入力してください(0-60)",seconds="タイムアウトする秒数を入力してください(0-60)")
     async def timeout(self, ctx: commands.Context, member: discord.Member, reason: str,  days: app_commands.Range[int, 0, 27], hours: app_commands.Range[int, 0, 24] , minutes: app_commands.Range[int, 0, 60], seconds:app_commands.Range[int, 0, 60]):
         embed=discord.Embed(title="タイムアウト", color=discord.Color.from_rgb(255, 0, 0))
@@ -111,7 +115,8 @@ class Server(commands.Cog):
         f"理由: `{reason}`\n" f"期間: `{days}日{hours}時間{minutes}分{seconds}秒`\n"
         f"詳しくは実行者{ctx.author.mention}、又は{ctx.guild.owner.mention}までお問い合わせ下さい")
 
-    @commands.hybrid_command(name="removetimeout", description="メンバーのタイムアウトを解除します", with_app_command=True)   
+    @commands.hybrid_command(name="removetimeout", description="メンバーのタイムアウトを解除します", with_app_command=True)
+    @app_commands.rename(member="メンバー", reason="理由")   
     @app_commands.describe(member="メンバーを選択して下さい")
     async def remove_timeout(self, ctx: commands.Context, member: discord.Member, reason=None):
         await member.timeout(None, reason=reason)
@@ -121,7 +126,8 @@ class Server(commands.Cog):
         await ctx.send(embed=embed)
         await member.send(f"あなたの `{ctx.guild}` でのタイムアウトは解除されました\n")
 
-    @commands.hybrid_command(name="mute", description="メンバーをミュートします", with_app_command=True)    
+    @commands.hybrid_command(name="mute", description="メンバーをミュートします", with_app_command=True)
+    @app_commands.rename(member="メンバー", reason="理由", role="ロール")    
     @app_commands.describe(member="メンバーを選択して下さい", reason = "ミュートする理由を入力して下さい", role="ロールがある場合は取り除くロール名を入れて下さい")
     async def mute(self, ctx: commands.Context, member: discord.Member, reason: str, role: discord.Role = None):
         guild = ctx.guild
@@ -145,7 +151,8 @@ class Server(commands.Cog):
         else:
             await member.remove_roles(role)
 
-    @commands.hybrid_command(name="removemute", description="メンバーをミュートを解除します", with_app_command=True)    
+    @commands.hybrid_command(name="removemute", description="メンバーをミュートを解除します", with_app_command=True)
+    @app_commands.rename(member="メンバー")    
     @app_commands.describe(member="メンバーを選択して下さい")
     async def unmute(self, ctx: commands.Context, member: discord.Member):
         mutedRole = discord.utils.get(ctx.guild.roles, name="ミュート中")
@@ -155,7 +162,8 @@ class Server(commands.Cog):
         await ctx.send(embed=embed)
         await member.send(f"あなたの `{ctx.guild.name}` でのミュートは解除されました")
 
-    @commands.hybrid_command(name="clear", description="送信したメッセージを消去します", with_app_command=True)    
+    @commands.hybrid_command(name="clear", description="送信したメッセージを消去します", with_app_command=True)
+    @app_commands.rename(amount="削除件数")    
     @app_commands.describe(amount="削除したい件数を入力して下さい")
     async def clear(self, ctx: commands.Context, amount: int):
         await ctx.send(f"メッセージが{amount}件分削除されます")
@@ -167,7 +175,7 @@ class Server(commands.Cog):
     async def ping(self, ctx: commands.Context):
         raw_ping = self.bot.latency
         ping = round(raw_ping * 1000)
-        embed = discord.Embed(title="🏓Ping",color=discord.Color.blurple())
+        embed = discord.Embed(title="🏓Pong!",color=discord.Color.blurple())
         embed.description = (f"BotのPing値は**{ping}**msです")
         await ctx.send(embed=embed)
 
