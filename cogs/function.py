@@ -1,4 +1,3 @@
-from turtle import title
 import discord
 from discord.ext import commands
 from discord import app_commands
@@ -12,7 +11,6 @@ import random
 import wikipedia
 #from selenium import webdriver
 import requests
-import time
 
 translator = Translator()
 api_key = "AIzaSyBJmDRfabTIgyx6as6WrCPalj1w4C0AYaE"
