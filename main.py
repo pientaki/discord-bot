@@ -27,9 +27,7 @@ class Bot(commands.Bot):
 bot = Bot()
 
 musicembed = discord.Embed(title="**:headphones: 音楽コマンド**",color=discord.Color.blurple())
-musicembed.description=(f"**/play ＜タイトル＞ : **音楽をYouTube経由で検索して再生\n"
-f"**/splay ＜spotifyのurl＞ : **音楽をSpotifyで検索して再生\n"
-f"**/socplay ＜タイトル＞ : **音楽をSoundCloud経由で検索して再生\n"
+musicembed.description=(f"**/play ＜タイトル＞ : **音楽を検索して再生\n"
 f"**/playstream ＜url＞ : **urlから音楽を再生\n"
 f"**/stop : **音声を停止\n"
 f"**/skip : **スキップ\n"    
@@ -46,8 +44,6 @@ convembed = discord.Embed(title="**:mag_right:  便利？コマンド**",color=d
 convembed.description=(f"**/trans ＜翻訳したい言語＞ ＜内容＞ : **翻訳機能\n"
 f"**/language : **翻訳言語一覧\n"
 f"**/search ＜検索ワード＞ : **ネットで検索\n"
-f"**/vote ＜テーマ＞ ＜選択肢１＞ ＜選択肢２＞ : **投票を作成\n"
-f"**/covid : **大阪府の新型コロナウイルス新規感染者数を検索\n"
 f"**/imagesearch : **ネット上の画像を検索\n"
 f"**/calculator : **計算機\n")
 

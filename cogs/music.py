@@ -89,7 +89,13 @@ class Music(commands.Cog):
     async def on_wavelink_node_ready(self, node: wavelink.Node):
         print(f"Node <{node.identifier}> is now Ready!")
 
-    @commands.hybrid_command(name="play",with_app_command = True, description="YouTubeの音楽を再生")
+    @commands.hybrid_group()
+    async def music(self, ctx: commands.Context):
+        if ctx.invoked_subcommand is None:
+            await ctx.send("Music commands")
+
+
+    @music.command(name="play",with_app_command = True, description="YouTubeの音楽を再生")
     @app_commands.describe(search="検索ワードかURL(spotify or youtube)")    
     async def play(self, ctx: commands.Context, *, search:str):
         await ctx.defer()
@@ -200,7 +206,7 @@ class Music(commands.Cog):
                 mbed.set_image(url="https://wavelink.readthedocs.io/en/1.0/_static/logo.png") 
                 await ctx.send(embed=mbed, view=view)
 
-    @commands.hybrid_command(name="disconnect", description="ボイスチャンネルから退出", with_app_command=True)    
+    @music.command(name="disconnect", description="ボイスチャンネルから退出", with_app_command=True)    
     async def leave_command(self, ctx:commands.Context):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -212,7 +218,7 @@ class Music(commands.Cog):
         mbed = discord.Embed(title="ボイスチャンネルから退出", color=discord.Color.from_rgb(255, 255, 255))
         await ctx.send(embed=mbed)
 
-    @commands.hybrid_command(name="stop", description="停止", with_app_command=True)    
+    @music.command(name="stop", description="停止", with_app_command=True)    
     async def stop_command(self, ctx:commands.Context):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -228,7 +234,7 @@ class Music(commands.Cog):
         else:
             return await ctx.send("現在音楽は流れていません")
 
-    @commands.hybrid_command(name="skip", description="スキップ", with_app_command=True)    
+    @music.command(name="skip", description="スキップ", with_app_command=True)    
     async def skip_command(self, ctx:commands.Context):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -243,7 +249,7 @@ class Music(commands.Cog):
         else:
             return await ctx.send("現在音楽は流れていません")
 
-    @commands.hybrid_command(name="pause", description="一時停止", with_app_command=True)    
+    @music.command(name="pause", description="一時停止", with_app_command=True)    
     async def pause_command(self, ctx:commands.Context):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -261,7 +267,7 @@ class Music(commands.Cog):
         else:
             return await ctx.send("既に一時停止中です")
 
-    @commands.hybrid_command(name="resume", description="再生", with_app_command=True)    
+    @music.command(name="resume", description="再生", with_app_command=True)    
     async def resume_command(self, ctx:commands.Context):
         node = wavelink.NodePool.get_node()
         player = node.get_player(ctx.guild)
@@ -276,7 +282,7 @@ class Music(commands.Cog):
         else:
             return await ctx.send("音楽は一時停止されていません")
 
-    @commands.hybrid_command(name="volume", description="ボリュームを変更します", with_app_command=True)    
+    @music.command(name="volume", description="ボリュームを変更します", with_app_command=True)    
     @app_commands.describe(volume="変更したい数値")
     async def volume_command(self, ctx:commands.Context, volume: int):
         vol=volume / 100
@@ -295,7 +301,7 @@ class Music(commands.Cog):
             mbed = discord.Embed(title=f"ボリュームが {volume} に変更されました", color=discord.Color.from_rgb(255, 255, 255))
             await ctx.send(embed=mbed)
 
-    @commands.hybrid_command(name="queue", description="キューを確認します", with_app_command=True)    
+    @music.command(name="queue", description="キューを確認します", with_app_command=True)    
     async def queue_command(self, ctx:commands.Context):
         vc: wavelink.Player = ctx.voice_client
         if vc.queue.is_empty:
@@ -308,7 +314,7 @@ class Music(commands.Cog):
             embed.add_field(name=f"No.{str(songCount)}", value=f"`{song}`")
         await ctx.send(embed=embed)
 
-    @commands.hybrid_command(name="bassboost", description="低音をブーストします", with_app_command=True)    
+    @music.command(name="bassboost", description="低音をブーストします", with_app_command=True)    
     async def boost_command(self, ctx:commands.Context):
         vc: wavelink.Player = ctx.voice_client
 
@@ -318,7 +324,7 @@ class Music(commands.Cog):
         await vc.set_filter(wavelink.Filter(equalizer=wavelink.Equalizer(name="MyOwnFilter",bands=bands)), seek=True)
         await ctx.send("ブースト開始")
 
-    @commands.hybrid_command(name="removeboost", description="ブースト解除します", with_app_command=True)    
+    @music.command(name="removeboost", description="ブースト解除します", with_app_command=True)    
     async def rmvboost_command(self, ctx:commands.Context):
         vc: wavelink.Player = ctx.voice_client
         await vc.set_filter(wavelink.Filter(equalizer=wavelink.Equalizer.flat()),seek=True)
