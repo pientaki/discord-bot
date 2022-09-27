@@ -107,7 +107,7 @@ class Ai(commands.Cog):
 
     @commands.hybrid_command(name="markov", description="マルコフ連鎖で文章を生成します", with_app_command=True)
     @app_commands.rename(text="テキスト")   
-    @app_commands.describe(text="もととなる文章を入力してください(5文以上、句読点削除推奨")
+    @app_commands.describe(text="もととなる文章を入力してください(5文以上、句読点削除推奨)")
     async def remove_timeout(self, ctx: commands.Context, text: str):
         m = MarkovChain()
         result = m.analyze(text)

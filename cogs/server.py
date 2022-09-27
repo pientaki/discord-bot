@@ -3,6 +3,8 @@ from discord.ext import commands
 from discord import app_commands
 from datetime import timedelta 
 import asyncio
+from typing import Literal
+import datetime
 
 class Server(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -170,13 +172,34 @@ class Server(commands.Cog):
         await asyncio.sleep(3)
         await ctx.channel.purge(limit=amount)
         
-
     @commands.hybrid_command(name="ping", description="botのping値を測定します", with_app_command=True)    
     async def ping(self, ctx: commands.Context):
         raw_ping = self.bot.latency
         ping = round(raw_ping * 1000)
         embed = discord.Embed(title="🏓Pong!",color=discord.Color.blurple())
         embed.description = (f"BotのPing値は**{ping}**msです")
+        await ctx.send(embed=embed)
+
+    @commands.hybrid_command(name="channel", description="チャンネルを作成します", with_app_command=True)
+    @app_commands.describe(title="チャンネルの名前を入力して下さい", type="チャンネルの種類を選択して下さい")
+    async def folum(self, ctx: commands.Context, title: str, type: Literal["テキストチャンネル", "ボイスチャンネル"]):
+        now = datetime.datetime.now()
+        guild = ctx.guild
+        chan = ctx.channel
+        Category = discord.utils.get(guild.categories, name="作成チャンネル")
+        chan_perm = chan.overwrites
+
+        if not Category:
+            Category = await guild.create_category(name="作成チャンネル")
+
+        if type=="テキストチャンネル":
+            await Category.create_text_channel(name=title, overwrites=chan_perm, topic="作成日"+ discord.utils.format_dt(now)+ " " +"作成者"+ctx.author.mention)
+        elif type=="ボイスチャンネル":
+            await Category.create_voice_channel(name=title)
+
+        chaninfo = discord.utils.get(guild.channels, name=title)
+
+        embed = discord.Embed(title="チャンネル作成", description=f"{ctx.author.mention}が{chaninfo.mention}を作成しました", color=discord.Color.blue())
         await ctx.send(embed=embed)
 
 async def setup(bot: commands.Bot):
