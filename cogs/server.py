@@ -14,7 +14,7 @@ class Server(commands.Cog):
     async def on_ready(self):
         print("Server Cog is now ready!")
 
-    @commands.hybrid_command(name="server", description="サーバー情報を表示", with_app_command=True)
+    @commands.hybrid_command(name="server", description="サーバー情報を表示します", with_app_command=True)
     async def server_info(self, ctx: commands.Context):
         owner=str(ctx.guild.owner)
         guild_id = str(ctx.guild.id)
@@ -58,7 +58,7 @@ class Server(commands.Cog):
 
         await ctx.send(embeds=embeds)
 
-    @commands.hybrid_command(name="user-info", description="ユーザー情報を表示", with_app_command=True)
+    @commands.hybrid_command(name="user-info", description="ユーザー情報を表示します", with_app_command=True)
     @app_commands.rename(member="メンバー")    
     @app_commands.describe(member="メンバーを選択して下さい")
     async def user_info(self, ctx: commands.Context, member: discord.Member):

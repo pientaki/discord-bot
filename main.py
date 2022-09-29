@@ -27,71 +27,85 @@ class Bot(commands.Bot):
 bot = Bot()
 
 musicembed = discord.Embed(title="**:headphones: 音楽コマンド**",color=discord.Color.blurple())
-musicembed.description=(f"**/play ＜タイトル＞ : **音楽を検索して再生\n"
-f"**/playstream ＜url＞ : **urlから音楽を再生\n"
-f"**/stop : **音声を停止\n"
-f"**/skip : **スキップ\n"    
-f"**/resume : **再生\n"
-f"**/pause : **一時停止\n"
-f"**/queue : **キュー覧を表示\n"
-f"**/pause : **一時停止\n"
-f"**/volume ＜音量＞ : **音量を変更\n"
-f"**/disconnect : **ボイスチャンネルから切断\n"
-f"**/bassboost : **低音をブースト\n"
-f"**/boostremove : **ブースト解除\n")
+musicembed.add_field(name="play ＜タイトル又はURL＞", value="音楽をタイトル名又はURLから検索して再生します。YouTube、Twitch、Spotify、Vimeo、SoundCloudに対応しています", inline=False)
+musicembed.add_field(name="stop", value="キューを全て削除して音楽を停止します", inline=False)
+musicembed.add_field(name="pause", value="音楽を一時停止します", inline=False)
+musicembed.add_field(name="resume", value="一時停止した音楽を再生します", inline=False)
+musicembed.add_field(name="skip", value="音楽をスキップします", inline=False)
+musicembed.add_field(name="queue", value="キュー覧を表示します", inline=False)
+musicembed.add_field(name="volume ＜音量＞", value="音量を変更します", inline=False)
+musicembed.add_field(name="disconnect", value="ボイスチャンネルから退出します", inline=False)
+musicembed.add_field(name="bassboost", value="低音をブーストします", inline=False)
+musicembed.add_field(name="removeboost", value="ブーストを解除します", inline=False)
 
-convembed = discord.Embed(title="**:mag_right:  便利？コマンド**",color=discord.Color.blurple())
-convembed.description=(f"**/trans ＜翻訳したい言語＞ ＜内容＞ : **翻訳機能\n"
-f"**/language : **翻訳言語一覧\n"
-f"**/search ＜検索ワード＞ : **ネットで検索\n"
-f"**/imagesearch : **ネット上の画像を検索\n"
-f"**/calculator : **計算機\n")
+convembed = discord.Embed(title="**:mag_right:  便利系コマンド**",color=discord.Color.blurple())
+convembed.add_field(name="translate ＜翻訳言語＞ ＜テキスト＞", value="翻訳します", inline=False)
+convembed.add_field(name="translate-language", value="翻訳言語一覧を表示します", inline=False)
+convembed.add_field(name="googlesearch ＜検索ワード＞", value="Googleで検索します(上位5件分)", inline=False)
+convembed.add_field(name="search ＜検索ワード＞", value="インターネットの検索結果のリンクを生成します", inline=False)
+convembed.add_field(name="imagesearch ＜検索ワード＞", value="画像を検索します", inline=False)
+convembed.add_field(name="wiki ＜検索ワード＞", value="Wikipediaで検索します", inline=False)
+convembed.add_field(name="weather ＜地名＞", value="天気を検索します", inline=False)
+convembed.add_field(name="calculator", value="計算機を表示します", inline=False)
 
-serverembed = discord.Embed(title="**:computer: サーバーコマンド**",color=discord.Color.blurple())
-serverembed.description=(f"**/kick ＜メンバー＞ : **メンバーをキック\n"
-f"**/ban ＜メンバー＞ : **メンバーをban\n"
-f"**/clear ＜消去数＞ : **メッセージを削除\n"
-f"**/mute ＜メンバー＞ : **メンバーをミュート\n"
-f"**/unmute ＜メンバー＞ : **ミュート解除\n"
-f"**/user-info ＜メンバー＞ : **メンバー情報\n"
-f"**/timeout ＜メンバー＞ : **メンバーをタイムアウト\n"
-f"**/removetimeout ＜メンバー＞ : **タイムアウト解除\n"
-f"**/activity ＜アクティビティー＞ : **botの～をプレイ中の部分を変更\n"
-f"**/lederboard : **リーダーボードを表示\n"
-f"**/stats ＜メンバー＞ : **ステータスを表示\n"
-f"**/ping : **botのpingを表示\n")
+modembed = discord.Embed(title="**🎛️  管理コマンド**",color=discord.Color.blurple())
+modembed.add_field(name="kick ＜メンバー＞ ＜理由＞", value="メンバーをキックします", inline=False)
+modembed.add_field(name="ban ＜メンバー＞ ＜理由＞", value="メンバーをbanします", inline=False)
+modembed.add_field(name="mute ＜メンバー＞ ＜理由＞", value="メンバーをミュートします", inline=False)
+modembed.add_field(name="removemute ＜メンバー＞ ＜理由＞", value="メンバーのミュートを解除します", inline=False)
+modembed.add_field(name="timeout ＜メンバー＞ ＜理由＞ ＜日数＞ ＜時間＞ ＜分＞ ＜秒＞", value="メンバーをタイムアウトします", inline=False)
+modembed.add_field(name="removetimeout ＜メンバー＞", value="メンバーのタイムアウトを解除します", inline=False)
+modembed.add_field(name="clear ＜削除件数＞", value="送信したメッセージを消去します", inline=False)
+
+servembed = discord.Embed(title="**:computer:  サーバー系コマンド**",color=discord.Color.blurple())
+servembed.add_field(name="server", value="サーバー情報を表示します", inline=False)
+servembed.add_field(name="user-info", value="ユーザー情報を表示します", inline=False)
+servembed.add_field(name="ping", value="botのping値を測定します", inline=False)
+servembed.add_field(name="snipe", value="最新の削除されたメッセージを復元します", inline=False)
+servembed.add_field(name="channel", value="チャンネルを作成します", inline=False)
+servembed.add_field(name="embed", value="埋め込みメッセージを作成します", inline=False)
 
 gameembed = discord.Embed(title="**:video_game: ゲームコマンド**",color=discord.Color.blurple())
-gameembed.description=(f"**/akinator : **アキネイターをプレイ\n"
-f"**/minesweeper : **マインスイーパーをプレイ\n")
+gameembed.add_field(name="akinator", value="アキネイターをプレイ", inline=False)
+gameembed.add_field(name="minesweeper", value="マインスイーパーをプレイ", inline=False)
+gameembed.add_field(name="rps", value="じゃんけんします", inline=False)
+gameembed.add_field(name="aidrow", value="AIがお絵描きします", inline=False)
 
-funembed = discord.Embed(title="**💩 その他コマンド**",color=discord.Color.blurple())
-funembed.description=(f"**/meme : **ミームを投稿\n"
-f"**/kodane : **褒美だ.......\n"
-f"**かすが : **春日..\n"
-f"**メンション ＜テキスト＞  : **AIとおしゃべり\n"
-f"**リアクション ＜:flag_us:＞  : **メッセージを英語に翻訳\n"
-f"**リアクション ＜:flag_in:＞  : **メッセージをヒンディー語に翻訳\n")
+funembed = discord.Embed(title="**💩 ネタコマンド**",color=discord.Color.blurple())
+funembed.add_field(name="meme", value="ミームを表示します", inline=False)
+funembed.add_field(name="gif", value="gifを送信します", inline=False)
+funembed.add_field(name="kodane", value="フリッツ王から褒美をもらえます", inline=False)
+funembed.add_field(name="markov", value="マルコフ連鎖で文章を生成します", inline=False)
+
+subembed = discord.Embed(title="**🕶️ その他**",color=discord.Color.blurple())
+subembed.add_field(name="メンション ＜テキスト＞", value="ソロウ君とおしゃべりできます", inline=False)
+subembed.add_field(name="リアクション ＜:flag_us:＞", value="メッセージを英語に翻訳します", inline=False)
+subembed.add_field(name="リアクション ＜:flag_in:＞", value="メッセージをヒンディー語に翻訳します", inline=False)
+
        
 class Dropdown(discord.ui.Select):
     def __init__(self):
 
-        options=[discord.SelectOption(label="音楽コマンド", description="音楽聞く時のコマンド一覧", emoji="🎶"), discord.SelectOption(label="サーバーコマンド", description="サーバーコマンド一覧", emoji="💻"),
-        discord.SelectOption(label="便利コマンド", description="そんな便利でもないコマンド一覧", emoji="🔎"), discord.SelectOption(label="ゲームコマンド", description="ゲームコマンド一覧", emoji="🎮"), discord.SelectOption(label="その他コマンド", description="しょーもないコマンド一覧", emoji="💩")]
+        options=[discord.SelectOption(label="音楽コマンド", description="音楽コマンド一覧", emoji="🎶"), discord.SelectOption(label="サーバー系コマンド", description="サーバー系コマンド一覧", emoji="💻"), discord.SelectOption(label="管理コマンド", description="管理コマンド一覧", emoji="🎛️"),
+        discord.SelectOption(label="便利系コマンド", description="便利系コマンド一覧", emoji="🔎"), discord.SelectOption(label="ゲームコマンド", description="ゲームコマンド一覧", emoji="🎮"), discord.SelectOption(label="ネタコマンド", description="ネタコマンド一覧", emoji="💩"), discord.SelectOption(label="その他", description="その他の機能", emoji="🕶️")]
     
         super().__init__(placeholder='コマンドのジャンルを選択して下さい', min_values=1, max_values=1, options=options)
 
     async def callback(self, interaction: discord.Interaction):
         if self.values[0] == "音楽コマンド":
             await interaction.response.edit_message(embed=musicembed)
-        elif self.values[0] == "サーバーコマンド":
-            await interaction.response.edit_message(embed=serverembed)
-        elif self.values[0] == "便利コマンド":
+        elif self.values[0] == "管理コマンド":
+            await interaction.response.edit_message(embed=modembed)
+        elif self.values[0] == "便利系コマンド":
             await interaction.response.edit_message(embed=convembed)
+        elif self.values[0] == "サーバー系コマンド":
+            await interaction.response.edit_message(embed=servembed)
         elif self.values[0] == "ゲームコマンド":
             await interaction.response.edit_message(embed=gameembed)
-        elif self.values[0] == "その他コマンド":
+        elif self.values[0] == "ネタコマンド":
             await interaction.response.edit_message(embed=funembed)
+        elif self.values[0] == "その他":
+            await interaction.response.edit_message(embed=subembed)
        
 class DropdownView(discord.ui.View):
     def __init__(self):
