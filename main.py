@@ -4,7 +4,7 @@ from discord import app_commands
 from itertools import cycle
 import os
 
-status=cycle(["/cmdでコマンド一覧","Apex","Among us","Rogue Company"])
+status=cycle(["/help","Apex","Among us","Rogue Company"])
 prefixes = ["!","?"]
 
 class Bot(commands.Bot):
@@ -122,7 +122,7 @@ async def on_ready():
 
 @bot.hybrid_command(name = "help", with_app_command = True, description = "コマンド一覧を表示")
 async def help_select(ctx: commands.Context):
-    helpembed = discord.Embed(title="Sorrows Official Bot",color=discord.Color.blurple())
+    helpembed = discord.Embed(title="Sorrows Official Bot",color=discord.Color.blurple(), url="https://github.com/pientaki/discord-bot")
     helpembed.set_thumbnail(url=bot.user.avatar.url)
     helpembed.add_field(name="導入サーバー数", value=len(bot.guilds))
     helpembed.add_field(name="メンバー数", value=len(bot.users))
@@ -151,7 +151,7 @@ async def snipe(ctx: commands.Context):
 
 @bot.tree.context_menu(name="コマンド一覧")
 async def show_join_date(interaction: discord.Interaction, member: discord.Member):
-    helpembed = discord.Embed(title="Sorrows Official Bot",color=discord.Color.blurple())
+    helpembed = discord.Embed(title="Sorrows Official Bot",color=discord.Color.blurple(), url="https://github.com/pientaki/discord-bot")
     helpembed.set_thumbnail(url=bot.user.avatar.url)
     helpembed.add_field(name="導入サーバー数", value=len(bot.guilds))
     helpembed.add_field(name="メンバー数", value=len(bot.users))
