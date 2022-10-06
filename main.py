@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 from discord import app_commands
 from itertools import cycle
 import os
+from jishaku.features.python import PythonFeature
 
 status=cycle(["/help","Apex","Among us","Rogue Company"])
 prefixes = ["!","?"]
@@ -19,7 +20,9 @@ class Bot(commands.Bot):
             if filename.endswith('.py'):
                 await self.load_extension(f'cogs.{filename[:-3]}')
         await self.tree.sync()
+        await self.load_extension("jishaku")
         print(f"Synced slash commands for {self.user}.")
+        print("JISHAKU")
 
     async def on_command_error(self, ctx, error):
         await ctx.reply(error)
