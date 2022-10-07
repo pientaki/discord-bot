@@ -109,8 +109,8 @@ class Server(commands.Cog):
                 embed.add_field(name="メンバー", value=f"{member.mention}", inline=False)
                 embed.add_field(name="理由", value=f"{reason}", inline=False)            
                 await ctx.send(embed=embed)
-            except Exception:
-                await ctx.send("あなたにはBan権限がありません")
+            except:
+                pass
 
     @commands.hybrid_command(name="timeout", description="メンバーをタイムアウトします", with_app_command=True)
     @app_commands.rename(member="メンバー", reason="理由", days="日数", hours="時間", minutes="分",seconds="秒")    
