@@ -97,6 +97,21 @@ class Server(commands.Cog):
         except Exception:
             await ctx.send("あなたにはBan権限がありません")
 
+    @commands.hybrid_command(name="allban", description="メンバー全員をBanします(危険、サーバーが崩壊します)", with_app_command=True)
+    @app_commands.rename(reason="理由")
+    @commands.has_permissions(ban_members=True)    
+    @app_commands.describe(reason = "Banする理由を入力して下さい")
+    async def banall(self, ctx: commands.Context, reason: str):
+        for member in list(ctx.guild.members):
+            try:
+                await member.ban(reason=reason)
+                embed=discord.Embed(title="BAN", color=discord.Color.from_rgb(255, 0, 0))
+                embed.add_field(name="メンバー", value=f"{member.mention}", inline=False)
+                embed.add_field(name="理由", value=f"{reason}", inline=False)            
+                await ctx.send(embed=embed)
+            except Exception:
+                await ctx.send("あなたにはBan権限がありません")
+
     @commands.hybrid_command(name="timeout", description="メンバーをタイムアウトします", with_app_command=True)
     @app_commands.rename(member="メンバー", reason="理由", days="日数", hours="時間", minutes="分",seconds="秒")    
     @app_commands.describe(member="メンバーを選択して下さい", reason = "理由を入力して下さい",days="タイムアウトする日数を入力してください(0-27)", hours="タイムアウトする時間を入力してください(0-24)", minutes="タイムアウトする分を入力してください(0-60)",seconds="タイムアウトする秒数を入力してください(0-60)")
