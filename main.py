@@ -4,6 +4,7 @@ from discord import app_commands
 from itertools import cycle
 import os
 from jishaku.features.python import PythonFeature
+import datetime
 
 status=cycle(["/help","Apex","Among us","Rogue Company"])
 prefixes = ["!","?"]
@@ -161,6 +162,43 @@ async def show_join_date(interaction: discord.Interaction, member: discord.Membe
     helpembed.add_field(name="Ping", value=f"{bot.latency*1000:.2f}ms")
     view = DropdownView()
     await interaction.response.send_message(embed=helpembed, view=view)
+
+@bot.hybrid_command(name = "global", with_app_command = True, description = "グローバルチャット用のチャンネルを作成します")
+async def banall(ctx: commands.Context):
+    now = datetime.datetime.now()
+
+    guild = ctx.guild
+    chan = ctx.channel
+    chan_perm = chan.overwrites
+
+    await guild.create_text_channel(name="グローバルチャット", overwrites=chan_perm, topic="作成日"+ discord.utils.format_dt(now)+ " " +"作成者"+ctx.author.mention)
+    chaninfo = discord.utils.get(guild.channels, name="グローバルチャット")
+
+    await chaninfo.create_webhook(name="グローバルチャット用")
+    await ctx.send(f"グローバルチャット用チャンネル{chaninfo.mention}が作成されました。チャットをしたい相手のサーバーにもこのbotを導入し、同じコマンドを実行してください。")
+
+@bot.event
+async def on_message(message):
+    if message.author.bot:
+        return
+    GLOBAL_CH_NAME = "グローバルチャット" # ""グローバルチャットのチャンネル名
+    GLOBAL_WEBHOOK_NAME = "グローバルチャット用" # ""グローバルチャットのWebhook名
+
+    if message.channel.name == GLOBAL_CH_NAME:
+        await message.delete()
+
+        channels = bot.get_all_channels()
+        global_channels = [ch for ch in channels if ch.name == GLOBAL_CH_NAME]
+
+        for channel in global_channels:
+            ch_webhooks = await channel.webhooks()
+            webhook = discord.utils.get(ch_webhooks, name=GLOBAL_WEBHOOK_NAME)
+
+            if webhook is None:
+                continue
+            await webhook.send(content=message.content,
+                username=message.author.name,
+                avatar_url=message.author.avatar.replace(format="png"))
 
 bot.run(os.environ["token"])
 
