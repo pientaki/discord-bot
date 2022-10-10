@@ -217,5 +217,46 @@ class Server(commands.Cog):
         embed = discord.Embed(title="チャンネル作成", description=f"{ctx.author.mention}が{chaninfo.mention}を作成しました", color=discord.Color.blue())
         await ctx.send(embed=embed)
 
+    @commands.hybrid_command(name="global", description="グローバルチャット用のチャンネルを作成します", with_app_command=True)
+    async def globalch(self, ctx: commands.Context):
+        now = datetime.datetime.now()
+
+        guild = ctx.guild
+        chan = ctx.channel
+        Category = discord.utils.get(guild.categories, name="global")
+        chan_perm = chan.overwrites
+
+        if not Category:
+            Category = await guild.create_category(name="global")
+
+        await Category.create_text_channel(name="グローバルチャット", overwrites=chan_perm, topic="作成日"+ discord.utils.format_dt(now)+ " " +"作成者"+ctx.author.mention)
+        chaninfo = discord.utils.get(guild.channels, name="グローバルチャット")
+
+        await chaninfo.create_webhook(name="グローバルチャット用")
+        await ctx.send(f"グローバルチャット用チャンネル{chaninfo.mention}が作成されました。チャットをしたい相手のサーバーにもこのbotを導入し、同じコマンドを実行してください。")
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+        GLOBAL_CH_NAME = "グローバルチャット" 
+        GLOBAL_WEBHOOK_NAME = "グローバルチャット用" 
+
+        if message.channel.name == GLOBAL_CH_NAME:
+            await message.delete()
+
+            channels = self.bot.get_all_channels()
+            global_channels = [ch for ch in channels if ch.name == GLOBAL_CH_NAME]
+
+            for channel in global_channels:
+                ch_webhooks = await channel.webhooks()
+                webhook = discord.utils.get(ch_webhooks, name=GLOBAL_WEBHOOK_NAME)
+
+                if webhook is None:
+                    continue
+                await webhook.send(content=message.content,
+                    username=message.author.name,
+                    avatar_url=message.author.avatar.replace(format="png"))
+
 async def setup(bot: commands.Bot):
     await bot.add_cog(Server(bot))

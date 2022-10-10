@@ -68,6 +68,7 @@ servembed.add_field(name="ping", value="botのping値を測定します", inline
 servembed.add_field(name="snipe", value="最新の削除されたメッセージを復元します", inline=False)
 servembed.add_field(name="channel", value="チャンネルを作成します", inline=False)
 servembed.add_field(name="embed", value="埋め込みメッセージを作成します", inline=False)
+servembed.add_field(name="global", value="グローバルチャット用のチャンネルを作成します(グローバルチャットとは、異なるサーバー同士での会話を可能にする機能のことです)", inline=False)
 
 gameembed = discord.Embed(title="**:video_game: ゲームコマンド**",color=discord.Color.blurple())
 gameembed.add_field(name="akinator", value="アキネイターをプレイ", inline=False)
@@ -163,42 +164,6 @@ async def show_join_date(interaction: discord.Interaction, member: discord.Membe
     view = DropdownView()
     await interaction.response.send_message(embed=helpembed, view=view)
 
-@bot.hybrid_command(name = "global", with_app_command = True, description = "グローバルチャット用のチャンネルを作成します")
-async def banall(ctx: commands.Context):
-    now = datetime.datetime.now()
-
-    guild = ctx.guild
-    chan = ctx.channel
-    chan_perm = chan.overwrites
-
-    await guild.create_text_channel(name="グローバルチャット", overwrites=chan_perm, topic="作成日"+ discord.utils.format_dt(now)+ " " +"作成者"+ctx.author.mention)
-    chaninfo = discord.utils.get(guild.channels, name="グローバルチャット")
-
-    await chaninfo.create_webhook(name="グローバルチャット用")
-    await ctx.send(f"グローバルチャット用チャンネル{chaninfo.mention}が作成されました。チャットをしたい相手のサーバーにもこのbotを導入し、同じコマンドを実行してください。")
-
-@bot.event
-async def on_message(message):
-    if message.author.bot:
-        return
-    GLOBAL_CH_NAME = "グローバルチャット" # ""グローバルチャットのチャンネル名
-    GLOBAL_WEBHOOK_NAME = "グローバルチャット用" # ""グローバルチャットのWebhook名
-
-    if message.channel.name == GLOBAL_CH_NAME:
-        await message.delete()
-
-        channels = bot.get_all_channels()
-        global_channels = [ch for ch in channels if ch.name == GLOBAL_CH_NAME]
-
-        for channel in global_channels:
-            ch_webhooks = await channel.webhooks()
-            webhook = discord.utils.get(ch_webhooks, name=GLOBAL_WEBHOOK_NAME)
-
-            if webhook is None:
-                continue
-            await webhook.send(content=message.content,
-                username=message.author.name,
-                avatar_url=message.author.avatar.replace(format="png"))
 
 bot.run(os.environ["token"])
 
