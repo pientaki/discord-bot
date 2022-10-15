@@ -65,6 +65,7 @@ class Server(commands.Cog):
         embed = discord.Embed(title=str(member), color=discord.Color.blue())
         embed.add_field(name="🔹作成日時", value=discord.utils.format_dt(member.created_at), inline=False)
         embed.add_field(name="🔹ID", value=member.id, inline=False)
+        embed.add_field(name="🔹ステータス", value=str(member.status).title())
         embed.add_field(name="🔹サーバー参加日時", value=discord.utils.format_dt(member.joined_at), inline=False)
         embed.set_thumbnail(url=member.avatar)
         await ctx.send(embed=embed)
