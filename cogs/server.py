@@ -267,7 +267,7 @@ class Server(commands.Cog):
                     avatar_url=message.author.avatar.replace(format="png"))
                 
     @channel.command(name="close", description="作成したチャンネルを削除します", with_app_command=True)
-    async def close(ctx: commands.Context):
+    async def close(self, ctx: commands.Context):
         guild = ctx.guild
         chan = ctx.channel
         Category = discord.utils.get(guild.categories, name="作成チャンネル")
