@@ -1,10 +1,12 @@
-from janome.tokenizer import Tokenizer 
-import discord
-from discord.ext import commands
-from discord import app_commands
-import requests
 import json
 import random
+
+import discord
+import requests
+from discord import app_commands
+from discord.ext import commands
+from janome.tokenizer import Tokenizer
+
 
 class MarkovChain:
     def analyze(self, text):

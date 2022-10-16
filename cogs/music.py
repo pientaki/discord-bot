@@ -1,8 +1,9 @@
 import discord
 import wavelink
 from discord import app_commands
-from wavelink.ext import spotify
 from discord.ext import commands
+from wavelink.ext import spotify
+
 
 class Buttons(discord.ui.View):
     def __init__(self):

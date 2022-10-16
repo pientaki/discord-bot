@@ -1,10 +1,12 @@
-import discord
-from discord.ext import commands
-from discord import app_commands
-from datetime import timedelta 
 import asyncio
-from typing import Literal
 import datetime
+from datetime import timedelta
+from typing import Literal
+
+import discord
+from discord import app_commands
+from discord.ext import commands
+
 
 class Server(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -195,8 +197,13 @@ class Server(commands.Cog):
         embed = discord.Embed(title="🏓Pong!",color=discord.Color.blurple())
         embed.description = (f"BotのPing値は**{ping}**msです")
         await ctx.send(embed=embed)
+    
+    @commands.hybrid_group()
+    async def channel(self, ctx: commands.Context):
+        if ctx.invoked_subcommand is None:
+            await ctx.send("Channel commands")
 
-    @commands.hybrid_command(name="channel", description="チャンネルを作成します", with_app_command=True)
+    @channel.command(name="channel", description="チャンネルを作成します", with_app_command=True)
     @app_commands.describe(title="チャンネルの名前を入力して下さい", type="チャンネルの種類を選択して下さい")
     async def folum(self, ctx: commands.Context, title: str, type: Literal["テキストチャンネル", "ボイスチャンネル"]):
         now = datetime.datetime.now()
@@ -215,26 +222,26 @@ class Server(commands.Cog):
 
         chaninfo = discord.utils.get(guild.channels, name=title)
 
-        embed = discord.Embed(title="チャンネル作成", description=f"{ctx.author.mention}が{chaninfo.mention}を作成しました", color=discord.Color.blue())
+        embed = discord.Embed(title="チャンネル作成", description=f"{ctx.author.mention}が{chaninfo.mention}を作成しました。チャンネルを削除したい場合は`/close`を実行してください。", color=discord.Color.blue())
         await ctx.send(embed=embed)
 
-    @commands.hybrid_command(name="global", description="グローバルチャット用のチャンネルを作成します", with_app_command=True)
+    @channel.command(name="global", description="グローバルチャット用のチャンネルを作成します", with_app_command=True)
     async def globalch(self, ctx: commands.Context):
         now = datetime.datetime.now()
 
         guild = ctx.guild
         chan = ctx.channel
-        Category = discord.utils.get(guild.categories, name="global")
+        Category = discord.utils.get(guild.categories, name="作成チャンネル")
         chan_perm = chan.overwrites
 
         if not Category:
-            Category = await guild.create_category(name="global")
+            Category = await guild.create_category(name="作成チャンネル")
 
         await Category.create_text_channel(name="グローバルチャット", overwrites=chan_perm, topic="作成日"+ discord.utils.format_dt(now)+ " " +"作成者"+ctx.author.mention)
         chaninfo = discord.utils.get(guild.channels, name="グローバルチャット")
 
         await chaninfo.create_webhook(name="グローバルチャット用")
-        await ctx.send(f"グローバルチャット用チャンネル{chaninfo.mention}が作成されました。チャットをしたい相手のサーバーにもこのbotを導入し、同じコマンドを実行してください。")
+        await ctx.send(f"グローバルチャット用チャンネル{chaninfo.mention}が作成されました。チャットをしたい相手のサーバーにもこのbotを導入し、同じコマンドを実行してください。チャンネルを削除したい場合は`/close`を実行してください。")
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -258,6 +265,17 @@ class Server(commands.Cog):
                 await webhook.send(content=message.content,
                     username=message.author.name,
                     avatar_url=message.author.avatar.replace(format="png"))
+                
+    @channel.command(name="close", description="作成したチャンネルを削除します", with_app_command=True)
+    async def close(ctx: commands.Context):
+        guild = ctx.guild
+        chan = ctx.channel
+        Category = discord.utils.get(guild.categories, name="作成チャンネル")
+
+        if chan.category==Category:
+            await chan.delete()
+        else:
+            await ctx.send("このチャンネルは削除できません")
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Server(bot))

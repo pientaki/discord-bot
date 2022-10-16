@@ -1,7 +1,8 @@
-from simpcalc import simpcalc
 import discord
-from discord.ext import commands
 from discord import app_commands
+from discord.ext import commands
+from simpcalc import simpcalc
+
 
 class InteractiveView(discord.ui.View):
     def __init__(self):

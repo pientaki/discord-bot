@@ -1,11 +1,13 @@
 import os
 import pathlib
 from enum import Enum
+
 import discord
 import requests
+import ujson as json
 from discord import app_commands
 from discord.ext import commands
-import ujson as json
+
 
 class Styles(Enum):
     synthwave = 1

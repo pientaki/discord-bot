@@ -1,10 +1,11 @@
-import discord
-from discord.ext import commands
-from discord import app_commands
 import asyncio
-import akinator
 import random
+
+import akinator
+import discord
 from akinator.async_aki import Akinator
+from discord import app_commands
+from discord.ext import commands
 from discord.ext.commands import BucketType
 
 aki = Akinator()

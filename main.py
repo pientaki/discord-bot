@@ -1,10 +1,11 @@
-import discord
-from discord.ext import commands, tasks
-from discord import app_commands
-from itertools import cycle
-import os
-from jishaku.features.python import PythonFeature
 import datetime
+import os
+from itertools import cycle
+
+import discord
+from discord import app_commands
+from discord.ext import commands, tasks
+from jishaku.features.python import PythonFeature
 
 status=cycle(["/help","Apex","Among us","Rogue Company"])
 prefixes = ["!","?"]
@@ -156,7 +157,7 @@ async def snipe(ctx: commands.Context):
     await ctx.send(embed=embed)
 
 @bot.tree.context_menu(name="コマンド一覧")
-async def show_join_date(interaction: discord.Interaction, member: discord.Member):
+async def show_join_date(interaction: discord.Interaction):
     helpembed = discord.Embed(title="Sorrows Official Bot",color=discord.Color.blurple(), url="https://github.com/pientaki/discord-bot")
     helpembed.set_thumbnail(url=bot.user.avatar.url)
     helpembed.add_field(name="導入サーバー数", value=len(bot.guilds))
