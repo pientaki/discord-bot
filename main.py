@@ -71,6 +71,7 @@ servembed.add_field(name="snipe", value="最新の削除されたメッセージ
 servembed.add_field(name="channel", value="チャンネルを作成します", inline=False)
 servembed.add_field(name="embed", value="埋め込みメッセージを作成します", inline=False)
 servembed.add_field(name="global", value="グローバルチャット用のチャンネルを作成します(グローバルチャットとは、異なるサーバー同士での会話を可能にする機能のことです)", inline=False)
+servembed.add_field(name="close", value="作成したチャンネルを削除します", inline=False)
 
 gameembed = discord.Embed(title="**:video_game: ゲームコマンド**",color=discord.Color.blurple())
 gameembed.add_field(name="akinator", value="アキネイターをプレイ", inline=False)
@@ -157,7 +158,7 @@ async def snipe(ctx: commands.Context):
     await ctx.send(embed=embed)
 
 @bot.tree.context_menu(name="コマンド一覧")
-async def show_join_date(interaction: discord.Interaction):
+async def show_join_date(interaction: discord.Interaction, member: discord.Member):
     helpembed = discord.Embed(title="Sorrows Official Bot",color=discord.Color.blurple(), url="https://github.com/pientaki/discord-bot")
     helpembed.set_thumbnail(url=bot.user.avatar.url)
     helpembed.add_field(name="導入サーバー数", value=len(bot.guilds))
