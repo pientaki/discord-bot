@@ -260,12 +260,12 @@ rpsready = 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/2
 rpslose = 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411175128.png'
 rpshondawin = ['https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411191123.gif','https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411192656.png', 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411192619.png', 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411192839.png']
 rpsGame = ['グー', 'チョキ', 'パー']
-comp_choice = random.choice(rpsGame)
+rpscoice = random.choice(rpsGame)
 
-embedlose=discord.Embed(title=None, description=f"俺の手は{comp_choice}")
+embedlose=discord.Embed(title=None, description=f"俺の手は{rpscoice}")
 embedlose.set_image(url="https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411175128.png")
 
-embedwin=discord.Embed(title=None, description=f"俺の手は{comp_choice}")
+embedwin=discord.Embed(title=None, description=f"俺の手は{rpscoice}")
 embedwin.set_image(url=f"{random.choice(rpshondawin)}")
 
 class RpsView(discord.ui.View):
@@ -274,30 +274,30 @@ class RpsView(discord.ui.View):
 
     @discord.ui.button(style=discord.ButtonStyle.green, label="グー", row=1)
     async def rock(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if comp_choice == 'グー':
-            return await interaction.response.edit_message(content=f"あいこや....しょーもな....俺の手は{comp_choice}", view=None)
-        elif comp_choice == 'パー':
+        if rpscoice == 'グー':
+            return await interaction.response.edit_message(content=f"あいこや....しょーもな....俺の手は{rpscoice}", view=None)
+        elif rpscoice == 'パー':
             return await interaction.response.edit_message(embed=embedlose, view=None)
-        elif comp_choice == 'チョキ':
+        elif rpscoice == 'チョキ':
             return await interaction.response.edit_message(embed=embedwin, view=None)
             
     @discord.ui.button(style=discord.ButtonStyle.green, label="パー", row=1)
     async def paper(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if comp_choice == 'グー':
+        if rpscoice == 'グー':
             return await interaction.response.edit_message(embed=embedwin, view=None)
-        elif comp_choice == 'パー':
-            return await interaction.response.edit_message(content=f'あいこや....しょーもな....俺の手は{comp_choice}', view=None)
-        elif comp_choice == 'チョキ':
+        elif rpscoice == 'パー':
+            return await interaction.response.edit_message(content=f'あいこや....しょーもな....俺の手は{rpscoice}', view=None)
+        elif rpscoice == 'チョキ':
             return await interaction.response.edit_message(embed=embedlose, view=None)
             
     @discord.ui.button(style=discord.ButtonStyle.green, label="チョキ", row=1)
     async def scissors(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if comp_choice == 'グー':
+        if rpscoice == 'グー':
             return await interaction.response.edit_message(embed=embedlose, view=None)
-        elif comp_choice == 'パー':
+        elif rpscoice == 'パー':
             return await interaction.response.edit_message(embed=embedwin, view=None)            
-        elif comp_choice == 'チョキ':
-            return await interaction.response.edit_message(content=f'あいこや....しょーもな....俺の手は{comp_choice}', view=None)
+        elif rpscoice == 'チョキ':
+            return await interaction.response.edit_message(content=f'あいこや....しょーもな....俺の手は{rpscoice}', view=None)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Game(bot))
