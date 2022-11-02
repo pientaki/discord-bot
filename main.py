@@ -32,7 +32,7 @@ class Bot(commands.Bot):
     
 bot = Bot()
 
-musicembed = discord.Embed(title="**:headphones: 音楽コマンド**",color=discord.Color.blurple())
+musicembed = discord.Embed(title="**<a:beat:1037376715653128262> 音楽コマンド**",color=discord.Color.blurple())
 musicembed.add_field(name="play ＜タイトル又はURL＞", value="音楽をタイトル名又はURLから検索して再生します。YouTube、Twitch、Spotify、Vimeo、SoundCloudに対応しています", inline=False)
 musicembed.add_field(name="stop", value="キューを全て削除して音楽を停止します", inline=False)
 musicembed.add_field(name="pause", value="音楽を一時停止します", inline=False)
@@ -94,7 +94,7 @@ subembed.add_field(name="リアクション ＜:flag_in:＞", value="メッセ�
 class Dropdown(discord.ui.Select):
     def __init__(self):
 
-        options=[discord.SelectOption(label="音楽コマンド", description="音楽コマンド一覧", emoji="🎶"), discord.SelectOption(label="サーバー系コマンド", description="サーバー系コマンド一覧", emoji="💻"), discord.SelectOption(label="管理コマンド", description="管理コマンド一覧", emoji="🎛️"),
+        options=[discord.SelectOption(label="音楽コマンド", description="音楽コマンド一覧", emoji="<a:beat:1037376715653128262>"), discord.SelectOption(label="サーバー系コマンド", description="サーバー系コマンド一覧", emoji="💻"), discord.SelectOption(label="管理コマンド", description="管理コマンド一覧", emoji="🎛️"),
         discord.SelectOption(label="便利系コマンド", description="便利系コマンド一覧", emoji="🔎"), discord.SelectOption(label="ゲームコマンド", description="ゲームコマンド一覧", emoji="🎮"), discord.SelectOption(label="ネタコマンド", description="ネタコマンド一覧", emoji="💩"), discord.SelectOption(label="その他", description="その他の機能", emoji="🕶️")]
     
         super().__init__(placeholder='コマンドのジャンルを選択して下さい', min_values=1, max_values=1, options=options)
@@ -130,7 +130,7 @@ async def on_ready():
 
 @bot.hybrid_command(name = "help", with_app_command = True, description = "コマンド一覧を表示")
 async def help_select(ctx: commands.Context):
-    helpembed = discord.Embed(title="Sorrows Official Bot",color=discord.Color.blurple(), url="https://github.com/pientaki/discord-bot")
+    helpembed = discord.Embed(title="<:sorrows:845835709066641439>Sorrows Official Bot",color=discord.Color.blurple(), url="https://github.com/pientaki/discord-bot")
     helpembed.set_thumbnail(url=bot.user.avatar.url)
     helpembed.add_field(name="導入サーバー数", value=len(bot.guilds))
     helpembed.add_field(name="メンバー数", value=len(bot.users))

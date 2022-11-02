@@ -70,7 +70,7 @@ class Server(commands.Cog):
         if str(user.status).title() == "Online":
             embed.add_field(name="🔹ステータス", value="オンライン<:online:1037012580226580560>")
         elif str(user.status).title() == "Offline":
-            embed.add_field(name="🔹ステータス", value="オフライン<:online:1037012580226580560>")
+            embed.add_field(name="🔹ステータス", value="オフライン<:offline:1037012640993640498>")
         elif str(user.status).title() == "Idle":
             embed.add_field(name="🔹ステータス", value="退席中<:idle:1037012601797890088>")
         elif str(user.status).title() == "Dnd":
@@ -78,7 +78,6 @@ class Server(commands.Cog):
             
         embed.add_field(name="🔹作成日時", value=discord.utils.format_dt(member.created_at), inline=False)
         embed.add_field(name="🔹ID", value=member.id, inline=False)
-        embed.add_field(name="🔹ステータス", value=str(member.status).title())
         embed.add_field(name="🔹サーバー参加日時", value=discord.utils.format_dt(member.joined_at), inline=False)
         embed.set_thumbnail(url=member.avatar)
         await ctx.send(embed=embed)

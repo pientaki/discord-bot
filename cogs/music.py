@@ -117,7 +117,7 @@ class Music(commands.Cog):
 
                 await vc.play(track)
 
-                mbed = discord.Embed(title="🎶再生中", color=discord.Color.from_rgb(255, 255, 255))
+                mbed = discord.Embed(title="<:spotify:1037380941506682920>再生中", color=discord.Color.from_rgb(255, 255, 255))
                 mbed.add_field(name="🎶タイトル", value=track.title)
                 mbed.add_field(name="🎶再生時間", value=round(track.duration / 60, 2))
                 mbed.add_field(name="🎶ボリューム", value=vc.volume)
@@ -139,7 +139,7 @@ class Music(commands.Cog):
                 track1 = await vc.node.get_tracks(query=search, cls=wavelink.Track)
 
                 await vc.play(track1[0])
-                mbed = discord.Embed(title="🎶再生中", color=discord.Color.from_rgb(255, 255, 255))
+                mbed = discord.Embed(title="<:youtube:1037380132056342529>再生中", color=discord.Color.from_rgb(255, 255, 255))
                 mbed.add_field(name="🎶url", value=search)
                 mbed.add_field(name="🎶タイトル", value=track1)
                 mbed.add_field(name="🎶ボリューム", value=vc.volume) 
@@ -163,7 +163,7 @@ class Music(commands.Cog):
 
                 await vc.play(track2)
 
-                mbed = discord.Embed(title="🎶再生中", color=discord.Color.from_rgb(255, 255, 255))
+                mbed = discord.Embed(title="<:youtube:1037380132056342529>再生中", color=discord.Color.from_rgb(255, 255, 255))
                 mbed.add_field(name="🎶タイトル", value=track2.title)
                 mbed.add_field(name="🎶再生時間", value=round(track2.duration / 60, 2))
                 mbed.add_field(name="🎶ボリューム", value=vc.volume)
