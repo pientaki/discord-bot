@@ -63,7 +63,7 @@ modembed.add_field(name="timeout ＜メンバー＞ ＜理由＞ ＜日数＞ �
 modembed.add_field(name="removetimeout ＜メンバー＞", value="メンバーのタイムアウトを解除します", inline=False)
 modembed.add_field(name="clear ＜削除件数＞", value="送信したメッセージを消去します", inline=False)
 
-servembed = discord.Embed(title="**:computer:  サーバー系コマンド**",color=discord.Color.blurple())
+servembed = discord.Embed(title="**<:server:1037738456195006524>  サーバー系コマンド**",color=discord.Color.blurple())
 servembed.add_field(name="server", value="サーバー情報を表示します", inline=False)
 servembed.add_field(name="user-info", value="ユーザー情報を表示します", inline=False)
 servembed.add_field(name="ping", value="botのping値を測定します", inline=False)
@@ -73,13 +73,13 @@ servembed.add_field(name="embed", value="埋め込みメッセージを作成し
 servembed.add_field(name="global", value="グローバルチャット用のチャンネルを作成します(グローバルチャットとは、異なるサーバー同士での会話を可能にする機能のことです)", inline=False)
 servembed.add_field(name="close", value="作成したチャンネルを削除します", inline=False)
 
-gameembed = discord.Embed(title="**:video_game: ゲームコマンド**",color=discord.Color.blurple())
+gameembed = discord.Embed(title="**<a:gamer:1037738473110651001> ゲームコマンド**",color=discord.Color.blurple())
 gameembed.add_field(name="akinator", value="アキネイターをプレイ", inline=False)
 gameembed.add_field(name="minesweeper", value="マインスイーパーをプレイ", inline=False)
 gameembed.add_field(name="rps", value="じゃんけんします", inline=False)
 gameembed.add_field(name="aidrow", value="AIがお絵描きします", inline=False)
 
-funembed = discord.Embed(title="**💩 ネタコマンド**",color=discord.Color.blurple())
+funembed = discord.Embed(title="**<a:laugh:1037738493583036416> ネタコマンド**",color=discord.Color.blurple())
 funembed.add_field(name="meme", value="ミームを表示します", inline=False)
 funembed.add_field(name="gif", value="gifを送信します", inline=False)
 funembed.add_field(name="kodane", value="フリッツ王から褒美をもらえます", inline=False)
@@ -94,8 +94,8 @@ subembed.add_field(name="リアクション ＜:flag_in:＞", value="メッセ�
 class Dropdown(discord.ui.Select):
     def __init__(self):
 
-        options=[discord.SelectOption(label="音楽コマンド", description="音楽コマンド一覧", emoji="<a:beat:1037376715653128262>"), discord.SelectOption(label="サーバー系コマンド", description="サーバー系コマンド一覧", emoji="💻"), discord.SelectOption(label="管理コマンド", description="管理コマンド一覧", emoji="🎛️"),
-        discord.SelectOption(label="便利系コマンド", description="便利系コマンド一覧", emoji="🔎"), discord.SelectOption(label="ゲームコマンド", description="ゲームコマンド一覧", emoji="🎮"), discord.SelectOption(label="ネタコマンド", description="ネタコマンド一覧", emoji="💩"), discord.SelectOption(label="その他", description="その他の機能", emoji="🕶️")]
+        options=[discord.SelectOption(label="音楽コマンド", description="音楽コマンド一覧", emoji="<a:beat:1037376715653128262>"), discord.SelectOption(label="サーバー系コマンド", description="サーバー系コマンド一覧", emoji="<:server:1037738456195006524>"), discord.SelectOption(label="管理コマンド", description="管理コマンド一覧", emoji="🎛️"),
+        discord.SelectOption(label="便利系コマンド", description="便利系コマンド一覧", emoji="🔎"), discord.SelectOption(label="ゲームコマンド", description="ゲームコマンド一覧", emoji="<a:gamer:1037738473110651001>"), discord.SelectOption(label="ネタコマンド", description="ネタコマンド一覧", emoji="<a:laugh:1037738493583036416>"), discord.SelectOption(label="その他", description="その他の機能", emoji="🕶️")]
     
         super().__init__(placeholder='コマンドのジャンルを選択して下さい', min_values=1, max_values=1, options=options)
 
@@ -130,7 +130,7 @@ async def on_ready():
 
 @bot.hybrid_command(name = "help", with_app_command = True, description = "コマンド一覧を表示")
 async def help_select(ctx: commands.Context):
-    helpembed = discord.Embed(title="<:sorrows:845835709066641439>Sorrows Official Bot",color=discord.Color.blurple(), url="https://github.com/pientaki/discord-bot")
+    helpembed = discord.Embed(title="<:sorrows:845835709066641439>  Sorrows Official Bot",color=discord.Color.blurple(), url="https://github.com/pientaki/discord-bot")
     helpembed.set_thumbnail(url=bot.user.avatar.url)
     helpembed.add_field(name="導入サーバー数", value=len(bot.guilds))
     helpembed.add_field(name="メンバー数", value=len(bot.users))
