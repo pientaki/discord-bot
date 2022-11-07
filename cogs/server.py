@@ -272,7 +272,12 @@ class Server(commands.Cog):
 
                 if webhook is None:
                     continue
-                await webhook.send(content=message.content,
+                elif message.attachments != []:
+                    await webhook.send(content=message.attachments[0].url,
+                    username=message.author.name,
+                    avatar_url=message.author.avatar.replace(format="png"))
+                else:
+                    await webhook.send(content=message.content,
                     username=message.author.name,
                     avatar_url=message.author.avatar.replace(format="png"))
                 

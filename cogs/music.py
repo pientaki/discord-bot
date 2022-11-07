@@ -190,20 +190,20 @@ class Music(commands.Cog):
             view = Buttons()
 
             if hasattr(new_song, 'thumb'):
-                mbed = discord.Embed(title="再生中", color=discord.Color.from_rgb(255, 255, 255))
-                mbed.add_field(name="タイトル", value=new_song.title)
-                mbed.add_field(name="再生時間", value=round(new_song.duration / 60, 2))
-                mbed.add_field(name="ボリューム", value=player.volume)
-                mbed.add_field(name="チャンネル", value=new_song.author) 
+                mbed = discord.Embed(title="🎶再生中", color=discord.Color.from_rgb(255, 255, 255))
+                mbed.add_field(name="🎶タイトル", value=new_song.title)
+                mbed.add_field(name="🎶再生時間", value=round(new_song.duration / 60, 2))
+                mbed.add_field(name="🎶ボリューム", value=player.volume)
+                mbed.add_field(name="🎶チャンネル", value=new_song.author) 
                 mbed.set_image(url=new_song.thumb) 
                 await ctx.send(embed=mbed, view=view)
 
             else:
-                mbed = discord.Embed(title="再生中", color=discord.Color.from_rgb(255, 255, 255))
-                mbed.add_field(name="タイトル", value=new_song.title)
-                mbed.add_field(name="再生時間", value=round(new_song.duration / 60, 2))
-                mbed.add_field(name="ボリューム", value=player.volume)
-                mbed.add_field(name="チャンネル", value=new_song.author) 
+                mbed = discord.Embed(title="🎶再生中", color=discord.Color.from_rgb(255, 255, 255))
+                mbed.add_field(name="🎶タイトル", value=new_song.title)
+                mbed.add_field(name="🎶再生時間", value=round(new_song.duration / 60, 2))
+                mbed.add_field(name="🎶ボリューム", value=player.volume)
+                mbed.add_field(name="🎶チャンネル", value=new_song.author) 
                 mbed.set_image(url="https://wavelink.readthedocs.io/en/1.0/_static/logo.png") 
                 await ctx.send(embed=mbed, view=view)
 
