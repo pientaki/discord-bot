@@ -1,5 +1,6 @@
 import datetime
 import random
+import os
 from urllib import parse
 
 import discord
@@ -14,8 +15,8 @@ from googlesearch import search
 from googletrans import Translator
 
 translator = Translator()
-api_key = "AIzaSyBJmDRfabTIgyx6as6WrCPalj1w4C0AYaE"
-weather_api_key = "9249796b3e638520a7b1f44a4830eb02"
+g_api_key = os.environ["g_api_key"]
+weather_api_key = os.environ["weather_api_key"]
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
 class Search(commands.Cog):
@@ -98,7 +99,7 @@ class Search(commands.Cog):
         t_delta = datetime.timedelta(hours=9)
         JST = datetime.timezone(t_delta, 'JST')
         ran = random.randint(0, 9)
-        resource = build("customsearch", "v1", developerKey=api_key).cse()
+        resource = build("customsearch", "v1", developerKey=g_api_key).cse()
         result = resource.list(
             q=f"{search}", cx="2dde91b36931db923", searchType="image"
         ).execute()

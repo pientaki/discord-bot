@@ -2,11 +2,14 @@ import json
 import random
 
 import discord
+import os
 import requests
 from discord import app_commands
 from discord.ext import commands
 from janome.tokenizer import Tokenizer
 
+mebo_api_key = os.environ["mebo_api_key"]
+agent_id = os.environ["agent_id"]
 
 class MarkovChain:
     def analyze(self, text):
@@ -100,7 +103,7 @@ class Ai(commands.Cog):
             words = message.content
             rewords = words[22:]
             headers = {"Content-Type": "application/json"}
-            payload = {"api_key":"c65aa7c6-abf2-4648-b063-5f12ec54ab2817fef5aef5f309","agent_id":"c2053c64-9d63-4f6a-acec-843634affc7917fef588da8178","utterance": rewords,"uid":"mebo.testtesttest001"}
+            payload = {"api_key":mebo_api_key,"agent_id":agent_id,"utterance": rewords,"uid":"mebo.testtesttest001"}
             url = 'https://api-mebo.dev/api'
             r = requests.post(url=url, headers=headers, data=json.dumps(payload))
             text = r.text
