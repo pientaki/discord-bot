@@ -5,7 +5,7 @@ from urllib import parse
 
 import discord
 import googletrans
-from selenium import webdriver
+#from selenium import webdriver
 import requests
 import wikipedia
 from discord import app_commands
@@ -127,7 +127,7 @@ class Search(commands.Cog):
         except wikipedia.exceptions.PageError:
             await ctx.send(f"{search}の結果が見つかりませんでした")
 
-    @commands.hybrid_command(name="screenshot", description="ネット上のページのスクリーンショットを撮影します", with_app_command=True)    
+    '''@commands.hybrid_command(name="screenshot", description="ネット上のページのスクリーンショットを撮影します", with_app_command=True)    
     @app_commands.describe(word="URLか検索したいページのキーワードを入力して下さい")
     async def ss(self, ctx: commands.Context, word: str):
         await ctx.defer()
@@ -167,7 +167,7 @@ class Search(commands.Cog):
                 browser.quit()
 
         except Exception as e:
-            await ctx.send("error")    
+            await ctx.send("error")'''    
 
     @commands.hybrid_command(name="weather", description="天気を表示します", with_app_command=True)    
     @app_commands.describe(city="地名を入力して下さい(英語)")
