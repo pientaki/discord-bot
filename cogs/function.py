@@ -5,7 +5,7 @@ from urllib import parse
 
 import discord
 import googletrans
-#from selenium import webdriver
+from selenium import webdriver
 import requests
 import wikipedia
 from discord import app_commands
@@ -127,47 +127,47 @@ class Search(commands.Cog):
         except wikipedia.exceptions.PageError:
             await ctx.send(f"{search}の結果が見つかりませんでした")
 
-    #@commands.hybrid_command(name="screenshot", description="ネット上のページのスクリーンショットを撮影します", with_app_command=True)    
-    #@app_commands.describe(word="URLか検索したいページのキーワードを入力して下さい")
-    #async def ss(self, ctx: commands.Context, word: str):
-        #await ctx.defer()
-        #try:
-            #options = webdriver.ChromeOptions()
-            #options.add_argument('--headless')
-            #options.add_argument('--disable-gpu')
-            #options.add_argument('--no-sandbox')
-            #options.add_argument('--disable-dev-shm-usage')
-            #options.add_argument('--remote-debugging-port=9222')
-            #options.add_experimental_option('excludeSwitches', ['enable-logging'])
-            #browser = webdriver.Chrome("chromedriver.exe", options=options)
-            #browser.set_window_size(950, 800)
+    @commands.hybrid_command(name="screenshot", description="ネット上のページのスクリーンショットを撮影します", with_app_command=True)    
+    @app_commands.describe(word="URLか検索したいページのキーワードを入力して下さい")
+    async def ss(self, ctx: commands.Context, word: str):
+        await ctx.defer()
+        try:
+            options = webdriver.ChromeOptions()
+            options.add_argument('--headless')
+            options.add_argument('--disable-gpu')
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--remote-debugging-port=9222')
+            options.add_experimental_option('excludeSwitches', ['enable-logging'])
+            browser = webdriver.Chrome("chromedriver.exe", options=options)
+            browser.set_window_size(950, 800)
 
-            #if not 'http' in str(word):
-                #kensaku = word
-                #for url in search(kensaku, lang="jp",num_results = 1):
-                    #browser.get(url)
-                    #browser.get_screenshot_as_file('screenshot.png')
+            if not 'http' in str(word):
+                kensaku = word
+                for url in search(kensaku, lang="jp",num_results = 1):
+                    browser.get(url)
+                    browser.get_screenshot_as_file('screenshot.png')
 
-                    #file = discord.File('screenshot.png', filename='image.png')
-                    #embed = discord.Embed(title=f"{url}")
-                    #embed.set_image(url='attachment://image.png')
-                    #await ctx.send(file=file, embed=embed)
-                    #browser.quit()
+                    file = discord.File('screenshot.png', filename='image.png')
+                    embed = discord.Embed(title=f"{url}")
+                    embed.set_image(url='attachment://image.png')
+                    await ctx.send(file=file, embed=embed)
+                    browser.quit()
 
-            #else:
-                #browser.get(word)
-                #browser.get_screenshot_as_file('screenshot.png')
+            else:
+                browser.get(word)
+                browser.get_screenshot_as_file('screenshot.png')
 
-                #file = discord.File('screenshot.png', filename='image.png')
+                file = discord.File('screenshot.png', filename='image.png')
 
                 
-                #embed = discord.Embed(title=f"{word}")
-                #embed.set_image(url='attachment://image.png')
-                #await ctx.send(file=file, embed=embed)
-                #browser.quit()
+                embed = discord.Embed(title=f"{word}")
+                embed.set_image(url='attachment://image.png')
+                await ctx.send(file=file, embed=embed)
+                browser.quit()
 
-        #except Exception as e:
-            #await ctx.send("error")    
+        except Exception as e:
+            await ctx.send("error")    
 
     @commands.hybrid_command(name="weather", description="天気を表示します", with_app_command=True)    
     @app_commands.describe(city="地名を入力して下さい(英語)")
