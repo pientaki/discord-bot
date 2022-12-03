@@ -148,12 +148,6 @@ class Search(commands.Cog):
         text_translated = translator.translate(text, dest=lang_to).text
         await ctx.send(text_translated)
 
-    @commands.hybrid_command(name="translate-language", description="翻訳言語一覧を表示します", with_app_command=True)    
-    async def lang(self, ctx: commands.Context):
-        embed = discord.Embed(title="翻訳言語一覧",color=discord.Color.blurple())
-        embed.description=(f"**Japanese :** ja \n"f"**English :** en \n"f"**Hindi :** hi\n\n"f"**:united_nations: その他**\n" "https://py-googletrans.readthedocs.io/en/latest/")
-        await ctx.send(embed=embed)
-
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         if reaction.count == 1:
