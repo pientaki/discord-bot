@@ -13,11 +13,121 @@ from discord.ext import commands
 from googleapiclient.discovery import build
 from googlesearch import search
 from googletrans import Translator
+from typing import Literal
 
 translator = Translator()
 g_api_key = os.environ["g_api_key"]
 weather_api_key = os.environ["weather_api_key"]
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
+
+lg = Literal['japanese',
+    'afrikaans',
+    'albanian',
+    'amharic',
+    'arabic',
+    'armenian',
+    'azerbaijani',
+    'basque',
+    'belarusian',
+    'bengali',
+    'bosnian',
+    'bulgarian',
+    'catalan',
+    'cebuano',
+    'chichewa',
+    'chinese (simplified)',
+    'chinese (traditional)',
+    'corsican',
+    'croatian',
+    'czech',
+    'danish',
+    'dutch',
+    'english',
+    'esperanto',
+    'estonian',
+    'filipino',
+    'finnish',
+    'french',
+    'frisian',
+    'galician',
+    'georgian',
+    'german',
+    'greek',
+    'gujarati',
+    'haitian creole',
+    'hausa',
+    'hawaiian',
+    'hebrew',
+    'hebrew',
+    'hindi',
+    'hmong',
+    'hungarian',
+    'icelandic',
+    'igbo',
+    'indonesian',
+    'irish',
+    'italian',
+    'javanese',
+    'kannada',
+    'kazakh',
+    'khmer',
+    'korean',
+    'kurdish (kurmanji)',
+    'kyrgyz',
+    'lao',
+    'latin',
+    'latvian',
+    'lithuanian',
+    'luxembourgish',
+    'macedonian',
+    'malagasy',
+    'malay',
+    'malayalam',
+    'maltese',
+    'maori',
+    'marathi',
+    'mongolian',
+    'myanmar (burmese)',
+    'nepali',
+    'norwegian',
+    'odia',
+    'pashto',
+    'persian',
+    'polish',
+    'portuguese',
+    'punjabi',
+    'romanian',
+    'russian',
+    'samoan',
+    'scots gaelic',
+    'serbian',
+    'sesotho',
+    'shona',
+    'sindhi',
+    'sinhala',
+    'slovak',
+    'slovenian',
+    'somali',
+    'spanish',
+    'sundanese',
+    'swahili',
+    'swedish',
+    'tajik',
+    'tamil',
+    'telugu',
+    'thai',
+    'turkish',
+    'ukrainian',
+    'urdu',
+    'uyghur',
+    'uzbek',
+    'vietnamese',
+    'welsh',
+    'xhosa',
+    'yiddish',
+    'yoruba',
+    'zulu',]
+    
 
 class Search(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -28,8 +138,8 @@ class Search(commands.Cog):
         print("Search Cog is now ready!")
 
     @commands.hybrid_command(name="translate", description="翻訳します", with_app_command=True)    
-    @app_commands.describe(lang_to="翻訳したい言語を入力(例. en,ja,hi...)", text = "翻訳したい内容を入力して下さい")
-    async def translate(self, ctx: commands.Context, lang_to: str, text: str):
+    @app_commands.describe(lang_to="翻訳したい言語を選択して下さい", text = "翻訳したい内容を入力して下さい")
+    async def translate(self, ctx: commands.Context, lang_to: lg, text: str):
         lang_to = lang_to.lower()
         if lang_to not in googletrans.LANGUAGES and lang_to not in googletrans.LANGCODES:
             raise commands.BadArgument("!!ERROR!!")
