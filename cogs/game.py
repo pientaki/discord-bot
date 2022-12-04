@@ -36,7 +36,7 @@ embedwin.set_image(url=f"{random.choice(rpshondawin)}")
 class RpsView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=60)
-
+    
     @discord.ui.button(style=discord.ButtonStyle.green, label="グー", row=1)
     async def rock(self, interaction: discord.Interaction, button: discord.ui.Button):
         if rpscoice == 'グー':
