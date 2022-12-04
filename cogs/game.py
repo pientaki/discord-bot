@@ -21,6 +21,145 @@ def w(name, desc, picture):
     embed_win.set_image(url=picture)
     return embed_win
 
+rpsready = 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411174821.gif'
+rpslose = 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411175128.png'
+rpshondawin = ['https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411191123.gif','https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411192656.png', 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411192619.png', 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411192839.png']
+rpsGame = ['グー', 'チョキ', 'パー']
+rpscoice = random.choice(rpsGame)
+
+embedlose=discord.Embed(title=None, description=f"俺の手は{rpscoice}")
+embedlose.set_image(url="https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411175128.png")
+
+embedwin=discord.Embed(title=None, description=f"俺の手は{rpscoice}")
+embedwin.set_image(url=f"{random.choice(rpshondawin)}")
+
+class RpsView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=60)
+
+    @discord.ui.button(style=discord.ButtonStyle.green, label="グー", row=1)
+    async def rock(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if rpscoice == 'グー':
+            return await interaction.response.edit_message(content=f"あいこや....しょーもな....俺の手は{rpscoice}", view=None)
+        elif rpscoice == 'パー':
+            return await interaction.response.edit_message(embed=embedlose, view=None)
+        elif rpscoice == 'チョキ':
+            return await interaction.response.edit_message(embed=embedwin, view=None)
+            
+    @discord.ui.button(style=discord.ButtonStyle.green, label="パー", row=1)
+    async def paper(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if rpscoice == 'グー':
+            return await interaction.response.edit_message(embed=embedwin, view=None)
+        elif rpscoice == 'パー':
+            return await interaction.response.edit_message(content=f'あいこや....しょーもな....俺の手は{rpscoice}', view=None)
+        elif rpscoice == 'チョキ':
+            return await interaction.response.edit_message(embed=embedlose, view=None)
+            
+    @discord.ui.button(style=discord.ButtonStyle.green, label="チョキ", row=1)
+    async def scissors(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if rpscoice == 'グー':
+            return await interaction.response.edit_message(embed=embedlose, view=None)
+        elif rpscoice == 'パー':
+            return await interaction.response.edit_message(embed=embedwin, view=None)            
+        elif rpscoice == 'チョキ':
+            return await interaction.response.edit_message(content=f'あいこや....しょーもな....俺の手は{rpscoice}', view=None)
+        
+class TicTacToeButton(discord.ui.Button['TicTacToe']):
+    def __init__(self, x: int, y: int):
+        super().__init__(style=discord.ButtonStyle.secondary, label='\u200b', row=y)
+        self.x = x
+        self.y = y
+
+    async def callback(self, interaction: discord.Interaction):
+        assert self.view is not None
+        view: TicTacToe = self.view
+        state = view.board[self.y][self.x]
+        if state in (view.X, view.O):
+            return
+
+        if view.current_player == view.X:
+            self.style = discord.ButtonStyle.danger
+            self.label = 'X'
+            self.disabled = False
+            view.board[self.y][self.x] = view.X
+            view.current_player = view.O
+            content = "O の番です"
+        else:
+            self.style = discord.ButtonStyle.success
+            self.label = 'O'
+            self.disabled = False
+            view.board[self.y][self.x] = view.O
+            view.current_player = view.X
+            content = "X の番です"
+
+        winner = view.check_board_winner()
+        if winner is not None:
+            if winner == view.X:
+                content = 'X の勝利！'
+            elif winner == view.O:
+                content = 'O の勝利！'
+            else:
+                content = "引き分け"
+
+            for child in view.children:
+                child.disabled = True
+
+            view.stop()
+
+        await interaction.response.edit_message(content=content, view=view)
+
+
+class TicTacToe(discord.ui.View):
+    children: List[TicTacToeButton]
+    X = -1
+    O = 1
+    Tie = 2
+
+    def __init__(self):
+        super().__init__()
+        self.current_player = self.X
+        self.board = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+
+        for x in range(3):
+            for y in range(3):
+                self.add_item(TicTacToeButton(x, y))
+
+    def check_board_winner(self):
+        for across in self.board:
+            value = sum(across)
+            if value == 3:
+                return self.O
+            elif value == -3:
+                return self.X
+
+        for line in range(3):
+            value = self.board[0][line] + self.board[1][line] + self.board[2][line]
+            if value == 3:
+                return self.O
+            elif value == -3:
+                return self.X
+
+        diag = self.board[0][2] + self.board[1][1] + self.board[2][0]
+        if diag == 3:
+            return self.O
+        elif diag == -3:
+            return self.X
+
+        diag = self.board[0][0] + self.board[1][1] + self.board[2][2]
+        if diag == 3:
+            return self.O
+        elif diag == -3:
+            return self.X
+
+        if all(i != 0 for row in self.board for i in row):
+            return self.Tie
+
+        return None
+
 class Game(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot: commands.Bot = bot
@@ -256,150 +395,10 @@ class Game(commands.Cog):
         view = RpsView()
         await ctx.send(embed=embed,view=view)
 
-    @commands.hybrid_command(name="Tic-Tac-Toe", description="o x ゲームをプレイ", with_app_command=True)    
+    @commands.hybrid_command(name="tic-tac-toe", description="o x ゲームをプレイ", with_app_command=True)    
     async def Tic(self, ctx: commands.Context):
         await ctx.send('o x ゲーム: X の番です', view=TicTacToe())
 
-rpsready = 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411174821.gif'
-rpslose = 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411175128.png'
-rpshondawin = ['https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411191123.gif','https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411192656.png', 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411192619.png', 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411192839.png']
-rpsGame = ['グー', 'チョキ', 'パー']
-rpscoice = random.choice(rpsGame)
-
-embedlose=discord.Embed(title=None, description=f"俺の手は{rpscoice}")
-embedlose.set_image(url="https://cdn-ak.f.st-hatena.com/images/fotolife/k/kiji0621/20190411/20190411175128.png")
-
-embedwin=discord.Embed(title=None, description=f"俺の手は{rpscoice}")
-embedwin.set_image(url=f"{random.choice(rpshondawin)}")
-
-class RpsView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=60)
-
-    @discord.ui.button(style=discord.ButtonStyle.green, label="グー", row=1)
-    async def rock(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if rpscoice == 'グー':
-            return await interaction.response.edit_message(content=f"あいこや....しょーもな....俺の手は{rpscoice}", view=None)
-        elif rpscoice == 'パー':
-            return await interaction.response.edit_message(embed=embedlose, view=None)
-        elif rpscoice == 'チョキ':
-            return await interaction.response.edit_message(embed=embedwin, view=None)
-            
-    @discord.ui.button(style=discord.ButtonStyle.green, label="パー", row=1)
-    async def paper(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if rpscoice == 'グー':
-            return await interaction.response.edit_message(embed=embedwin, view=None)
-        elif rpscoice == 'パー':
-            return await interaction.response.edit_message(content=f'あいこや....しょーもな....俺の手は{rpscoice}', view=None)
-        elif rpscoice == 'チョキ':
-            return await interaction.response.edit_message(embed=embedlose, view=None)
-            
-    @discord.ui.button(style=discord.ButtonStyle.green, label="チョキ", row=1)
-    async def scissors(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if rpscoice == 'グー':
-            return await interaction.response.edit_message(embed=embedlose, view=None)
-        elif rpscoice == 'パー':
-            return await interaction.response.edit_message(embed=embedwin, view=None)            
-        elif rpscoice == 'チョキ':
-            return await interaction.response.edit_message(content=f'あいこや....しょーもな....俺の手は{rpscoice}', view=None)
-        
-class TicTacToeButton(discord.ui.Button['TicTacToe']):
-    def __init__(self, x: int, y: int):
-        super().__init__(style=discord.ButtonStyle.secondary, label='\u200b', row=y)
-        self.x = x
-        self.y = y
-
-    async def callback(self, interaction: discord.Interaction):
-        assert self.view is not None
-        view: TicTacToe = self.view
-        state = view.board[self.y][self.x]
-        if state in (view.X, view.O):
-            return
-
-        if view.current_player == view.X:
-            self.style = discord.ButtonStyle.danger
-            self.label = 'X'
-            self.disabled = False
-            view.board[self.y][self.x] = view.X
-            view.current_player = view.O
-            content = "O の番です"
-        else:
-            self.style = discord.ButtonStyle.success
-            self.label = 'O'
-            self.disabled = False
-            view.board[self.y][self.x] = view.O
-            view.current_player = view.X
-            content = "X の番です"
-
-        winner = view.check_board_winner()
-        if winner is not None:
-            if winner == view.X:
-                content = 'X の勝利！'
-            elif winner == view.O:
-                content = 'O の勝利！'
-            else:
-                content = "引き分け"
-
-            for child in view.children:
-                child.disabled = True
-
-            view.stop()
-
-        await interaction.response.edit_message(content=content, view=view)
-
-
-class TicTacToe(discord.ui.View):
-    children: List[TicTacToeButton]
-    X = -1
-    O = 1
-    Tie = 2
-
-    def __init__(self):
-        super().__init__()
-        self.current_player = self.X
-        self.board = [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-        ]
-
-        for x in range(3):
-            for y in range(3):
-                self.add_item(TicTacToeButton(x, y))
-
-    def check_board_winner(self):
-        for across in self.board:
-            value = sum(across)
-            if value == 3:
-                return self.O
-            elif value == -3:
-                return self.X
-
-        for line in range(3):
-            value = self.board[0][line] + self.board[1][line] + self.board[2][line]
-            if value == 3:
-                return self.O
-            elif value == -3:
-                return self.X
-
-        diag = self.board[0][2] + self.board[1][1] + self.board[2][0]
-        if diag == 3:
-            return self.O
-        elif diag == -3:
-            return self.X
-
-        diag = self.board[0][0] + self.board[1][1] + self.board[2][2]
-        if diag == 3:
-            return self.O
-        elif diag == -3:
-            return self.X
-
-        if all(i != 0 for row in self.board for i in row):
-            return self.Tie
-
-        return None
-    
-    
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Game(bot))
