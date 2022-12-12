@@ -12,7 +12,7 @@ prefixes = ["!","?"]
 
 class Bot(commands.Bot):
     def __init__(self):
-        intents = discord.Intents.default()
+        intents = discord.Intents.all()
         intents.message_content = True
         intents.members = True
         intents.presences = True
@@ -168,7 +168,8 @@ async def show_join_date(interaction: discord.Interaction, member: discord.Membe
     await interaction.response.send_message(embed=helpembed, view=view)
 
 pw = os.environ["dbpw"]
-dsn = f"port=5432 dbname=postgres host=db.lkpgummbyyrzcvtlsoim.supabase.co user=postgres password={pw}"
+host = os.environ["host"]
+dsn = f"port=5432 dbname=postgres host={host} user=postgres password={pw}"
 conn = psycopg2.connect(dsn)
 cur = conn.cursor()  
 
@@ -192,23 +193,27 @@ async def on_message(message):
         cur.execute("UPDATE app_user set level=%s,xp=%s WHERE userid=%s AND guild = %s",(data[1]+1,0,message.author.id, message.guild.id,))
         conn.commit()
         await message.channel.send(f"{message.author.mention}がレベル{data[1]+1}になりました")
+    cur.close
+    conn.close
 
 
 
 @bot.hybrid_command(name = "level", with_app_command = True, description = "ユーザーのレベルを表示します")
 @app_commands.rename(target="メンバー")    
 async def level(ctx: commands.Context, target:discord.User=None):
-  guild = ctx.guild
-  if target is None:
-    user=ctx.author
-  else:
-    user=target
-  cur.execute("SELECT * FROM app_user WHERE userid=%s AND guild = %s", (user.id, guild.id,))
-  data=cur.fetchone()
-  if data is None:
-    await ctx.send("ユーザーが登録されていません")
-  e=discord.Embed(title=f"{user}のランク", description=f"Lv.{data[1]}")
-  await ctx.send(embed=e)
+    guild = ctx.guild
+    if target is None:
+        user=ctx.author
+    else:
+        user=target
+    cur.execute("SELECT * FROM app_user WHERE userid=%s AND guild = %s", (user.id, guild.id,))
+    data=cur.fetchone()
+    if data is None:
+        await ctx.send("ユーザーが登録されていません")
+    e=discord.Embed(title=f"{user}のランク", description=f"Lv.{data[1]}", color=discord.Colour.gold)
+    await ctx.send(embed=e)
+    cur.close
+    conn.close
 
 bot.run(os.environ["token"])
 
