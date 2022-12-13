@@ -22,6 +22,7 @@ class Bot(commands.Bot):
         for filename in os.listdir('./cogs'):
             if filename.endswith('.py'):
                 await self.load_extension(f'cogs.{filename[:-3]}')
+        await self.tree.sync()
         await self.load_extension("jishaku")
         print(f"Synced slash commands for {self.user}.")
         print("JISHAKU")
@@ -214,7 +215,7 @@ async def level(ctx: commands.Context, target:discord.User=None):
     cur.close
     conn.close
 
-@bot.tree.command(name="sync", description="スラッシュコマンド登録,owner only")
+@bot.command(name="sync", description="スラッシュコマンド登録,owner only")
 async def treesync(interaction: discord.Interaction):
     await bot.tree.sync()
     await interaction.response.send_message("スラッシュコマンドを登録しました", ephemeral=True)
