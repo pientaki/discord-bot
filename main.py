@@ -210,7 +210,7 @@ async def level(ctx: commands.Context, target:discord.User=None):
     data=cur.fetchone()
     if data is None:
         await ctx.send("ユーザーが登録されていません")
-    e=discord.Embed(title=f"{user}のランク", description=f"Lv.{data[1]}", color=discord.Colour.gold)
+    e=discord.Embed(title=f"{user}のランク", description=f"Lv.{data[1]}", color=discord.Colour.gold())
     await ctx.send(embed=e)
     cur.close
     conn.close
