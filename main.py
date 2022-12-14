@@ -215,10 +215,77 @@ async def level(ctx: commands.Context, target:discord.User=None):
     cur.close
     conn.close
 
-@bot.command(name="sync", description="スラッシュコマンド登録,owner only")
+class Tag(discord.ui.Modal, title='タグ'):
+    name = discord.ui.TextInput(
+        label='タイトル',
+        placeholder='タイトル',
+    )
+    
+    content = discord.ui.TextInput(
+        label='内容',
+        style=discord.TextStyle.long,
+        placeholder='タグの内容を入力して下さい',
+        required=False,
+        max_length=300,
+    )
+
+    async def on_submit(self, interaction: discord.Interaction):
+        sql = "INSERT INTO tags (title, content) VALUES (%s, %s)"
+        cur.execute(sql, (self.name.value, self.content.value))
+        await interaction.response.send_message(f'タグ ***{self.name.value}*** が正常に作成されました', ephemeral=True)
+        cur.close
+        conn.close
+
+
+    async def on_error(self, interaction: discord.Interaction, error: Exception) -> None:
+        await interaction.response.send_message('エラーが発生しました', ephemeral=True)
+
+@bot.tree.command(name = "tag", description = "タグを作成します")
+async def tag(interaction: discord.Interaction):
+    await interaction.response.send_modal(Tag())
+
+@bot.hybrid_command(name = "tagget", with_app_command = True, description = "tagget")
+@app_commands.describe(name="タグのタイトルを入力して下さい")
+async def taget(ctx: commands.Context, name: str):
+    try:
+        
+        cur.execute("SELECT content FROM tags WHERE title= %s ", (name,))
+        data=cur.fetchone()
+
+        await ctx.send(data[0])
+
+        cur.close
+        conn.close
+
+
+    except Exception:
+        await ctx.send("タグが見つかりません /tagsearch で名前を確認してください")
+
+@bot.hybrid_command(name = "tagsearch", with_app_command = True, description = "タグのタイトル一覧を表示します")
+async def tagsearch(ctx: commands.Context):
+    cur.execute("SELECT title FROM tags")
+    data = cur.fetchall()
+    result_1d = [row[0] for row in data]
+    datafix = '\n'.join(result_1d)
+
+    embed = discord.Embed(title="タグ一覧", description=datafix, color=discord.Colour.gold())
+
+    await ctx.send(embed=embed)
+
+    cur.close
+    conn.close
+
+
+
+
+
+
+'''
+@bot.tree.command(name="sync", description="スラッシュコマンド登録,owner only")
 async def treesync(interaction: discord.Interaction):
     await bot.tree.sync()
     await interaction.response.send_message("スラッシュコマンドを登録しました", ephemeral=True)
+'''
 
 bot.run(os.environ["token"])
 
