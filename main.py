@@ -72,6 +72,10 @@ servembed.add_field(name="channel", value="チャンネルを作成します", i
 servembed.add_field(name="embed", value="埋め込みメッセージを作成します", inline=False)
 servembed.add_field(name="global", value="グローバルチャット用のチャンネルを作成します(グローバルチャットとは、異なるサーバー同士での会話を可能にする機能のことです)", inline=False)
 servembed.add_field(name="close", value="作成したチャンネルを削除します", inline=False)
+servembed.add_field(name="level", value="レベルを確認します", inline=False)
+servembed.add_field(name="tag", value="タグを作成します", inline=False)
+servembed.add_field(name="tagget", value="タグを名前で取得します", inline=False)
+servembed.add_field(name="tagsearch", value="タグの名前一覧を表示します", inline=False)
 
 gameembed = discord.Embed(title="**<a:gamer:1037738473110651001> ゲームコマンド**",color=discord.Color.blurple())
 gameembed.add_field(name="akinator", value="アキネイターをプレイ", inline=False)
@@ -244,7 +248,7 @@ class Tag(discord.ui.Modal, title='タグ'):
 async def tag(interaction: discord.Interaction):
     await interaction.response.send_modal(Tag())
 
-@bot.hybrid_command(name = "tagget", with_app_command = True, description = "tagget")
+@bot.hybrid_command(name = "tagget", with_app_command = True, description = "タグを取得します")
 @app_commands.describe(name="タグのタイトルを入力して下さい")
 async def taget(ctx: commands.Context, name: str):
     try:
@@ -259,7 +263,7 @@ async def taget(ctx: commands.Context, name: str):
 
 
     except Exception:
-        await ctx.send("タグが見つかりません /tagsearch で名前を確認してください")
+        await ctx.send("タグが見つかりません </tagsearch:1052607497690681406> で名前を確認してください")
 
 @bot.hybrid_command(name = "tagsearch", with_app_command = True, description = "タグのタイトル一覧を表示します")
 async def tagsearch(ctx: commands.Context):
@@ -274,9 +278,6 @@ async def tagsearch(ctx: commands.Context):
 
     cur.close
     conn.close
-
-
-
 
 
 
