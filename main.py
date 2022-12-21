@@ -230,7 +230,7 @@ class Tag(discord.ui.Modal, title='タグ'):
         style=discord.TextStyle.long,
         placeholder='タグの内容を入力して下さい',
         required=False,
-        max_length=300,
+        max_length=2000,
     )
 
     async def on_submit(self, interaction: discord.Interaction):
