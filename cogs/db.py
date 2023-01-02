@@ -86,7 +86,7 @@ class DB(commands.Cog):
         cur.close
         conn.close
 
-    @app_commands.Group()
+    @app_commands.Group(description="Tag commands")
     async def tag(self, interaction: discord.Interaction):    
         await interaction.response.send_message("Tag commands")
 
