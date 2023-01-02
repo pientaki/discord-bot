@@ -86,7 +86,9 @@ class DB(commands.Cog):
         cur.close
         conn.close
 
-    tag = app_commands.Group(name="tag", description="タグ機能")
+    @app_commands.Group()
+    async def tag(self, interaction: discord.Interaction):    
+        await interaction.response.send_message("Tag commands")
 
 
     @tag.command(name = "create", description = "タグを作成します")
