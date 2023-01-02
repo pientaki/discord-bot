@@ -13,39 +13,14 @@ from discord.ext import commands
 from googleapiclient.discovery import build
 from googlesearch import search
 from googletrans import Translator
-from typing import Literal
+from data.lg import lg
 
 translator = Translator()
 g_api_key = os.environ["g_api_key"]
 weather_api_key = os.environ["weather_api_key"]
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
-lg = Literal['japanese',
-    'arabic',
-    'chinese (simplified)',
-    'chinese (traditional)',
-    'english',
-    'french',
-    'german',
-    'hawaiian',
-    'hindi',
-    'indonesian',
-    'irish',
-    'italian',
-    'korean',
-    'malay',
-    'maori',
-    'mongolian',
-    'russian',
-    'sinhala',
-    'spanish',
-    'swahili',
-    'tamil',
-    'thai',
-    'turkish',
-    'ukrainian',
-    'zulu']
-    
+
 
 class Search(commands.Cog):
     def __init__(self, bot: commands.Bot):

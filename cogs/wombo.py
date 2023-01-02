@@ -38,14 +38,6 @@ class Styles(Enum):
 
 
 async def gen_image(prompt: str, style):
-    """
-    It gets the token, gets the ID of the task, creates the task, and
-    checks if the image is done.
-    :param prompt: The text that will be written on the image
-    :type prompt: str
-    :param style: The style of the image
-    :return: The URL of the image.
-    """
     with requests.Session() as session:
 
         get_token = requests.post(
