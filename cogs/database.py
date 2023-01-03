@@ -41,6 +41,8 @@ class DB(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot: commands.Bot = bot
 
+    tag = app_commands.Group(name="tag", description="tag commands")
+
     @commands.Cog.listener()
     async def on_ready(self):
         print("DB Cog is now ready!")
@@ -85,10 +87,6 @@ class DB(commands.Cog):
         await ctx.send(embed=e)
         cur.close
         conn.close
-
-    @app_commands.Group(description="Tag commands")
-    async def tag(self, interaction: discord.Interaction):    
-        await interaction.response.send_message("Tag commands")
 
 
     @tag.command(name = "create", description = "タグを作成します")
