@@ -41,7 +41,6 @@ class DB(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot: commands.Bot = bot
 
-    tag = app_commands.Group(name="tag", description="tag commands")
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -89,12 +88,12 @@ class DB(commands.Cog):
         conn.close
 
 
-    @tag.command(name = "create", description = "タグを作成します")
+    @app_commands.command(name = "tag-create", description = "タグを作成します")
     async def tag(self, interaction: discord.Interaction):
         await interaction.response.send_message("タグを作成します..", ephemeral=True)
         await interaction.response.send_modal(Tag())
 
-    @tag.command(name = "get", description = "タグを取得します")
+    @app_commands.command(name = "tag-get", description = "タグを取得します")
     @app_commands.describe(name="タグのタイトルを入力して下さい")
     async def tag(self, interaction: discord.Interaction, name: str):
         try:
@@ -112,7 +111,7 @@ class DB(commands.Cog):
             await interaction.response.send_message("タグが見つかりません </tagsearch:1052607497690681406> で名前を確認してください")
 
         
-    @tag.command(name = "search", description = "タグのタイトル一覧を表示します")
+    @app_commands.command(name = "tag-search", description = "タグのタイトル一覧を表示します")
     @app_commands.describe(name="タグのタイトルを入力して下さい")
     async def tag(self, interaction: discord.Interaction):
         cur.execute("SELECT title FROM tags")
