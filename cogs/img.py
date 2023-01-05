@@ -1,11 +1,12 @@
 import os
+import PIL.ImageFilter
+import PIL.Image
 import discord
 from discord.ext import commands
 from discord import app_commands
-import requests
-import shutil
-from PIL import Image, ImageDraw , ImageFilter
+from functools import partial
 from io import BytesIO
+from typing import Union
 
 
 class Image(commands.Cog):
@@ -29,7 +30,7 @@ class Image(commands.Cog):
             member = ctx.author
 
         data = BytesIO(await member.display_avatar.read())
-        pfp = Image.open(data)
+        pfp = PIL.Image.open(data)
 
         nwpfp = pfp.convert("L")
 
@@ -45,7 +46,7 @@ class Image(commands.Cog):
        
 
         data = BytesIO(await img.read())
-        pfp = Image.open(data)
+        pfp = PIL.Image.open(data)
 
         nwpfp = pfp.convert("L")
 
@@ -62,12 +63,12 @@ class Image(commands.Cog):
        
 
         data = BytesIO(await img.read())
-        pfp = Image.open(data)
+        pfp = PIL.Image.open(data)
 
         pfp_list = []
 
         for i in range(35,0,-1):    
-            pfp_r = pfp.filter(ImageFilter.GaussianBlur(i))
+            pfp_r = pfp.filter(PIL.ImageFilter.GaussianBlur(i))
             pfp_list.append(pfp_r)
 
         pfp_list[0].save('./img/blur.gif', save_all=True, append_images=pfp_list[1:], optimize=True, duration=200, loop=0)  

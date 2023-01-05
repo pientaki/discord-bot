@@ -91,11 +91,11 @@ class dab(commands.Cog):
         conn.close
 
 
-    @tg.command(name = "tag-create", description = "タグを作成します")
+    @tg.command(name = "create", description = "タグを作成します")
     async def tag(self, interaction: discord.Interaction):
         await interaction.response.send_modal(Tag())
 
-    @tg.command(name = "tag-get", description = "タグを取得します")
+    @tg.command(name = "get", description = "タグを取得します")
     @app_commands.describe(name="タグのタイトルを入力して下さい")
     async def tag(self, interaction: discord.Interaction, name: str):
         try:
@@ -113,7 +113,7 @@ class dab(commands.Cog):
             await interaction.response.send_message("タグが見つかりません </tagsearch:1052607497690681406> で名前を確認してください")
 
         
-    @tg.command(name = "tag-search", description = "タグのタイトル一覧を表示します")
+    @tg.command(name = "search", description = "タグのタイトル一覧を表示します")
     async def tag(self, interaction: discord.Interaction):
         cur.execute("SELECT title FROM tags")
         data = cur.fetchall()
