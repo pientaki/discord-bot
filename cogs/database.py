@@ -114,7 +114,6 @@ class dab(commands.Cog):
 
         
     @tg.command(name = "tag-search", description = "タグのタイトル一覧を表示します")
-    @app_commands.describe(name="タグのタイトルを入力して下さい")
     async def tag(self, interaction: discord.Interaction):
         cur.execute("SELECT title FROM tags")
         data = cur.fetchall()
