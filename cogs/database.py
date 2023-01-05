@@ -1,5 +1,6 @@
 import psycopg2
 from discord import app_commands
+from discord.app_commands import Group
 from discord.ext import commands
 import os
 import discord
@@ -36,10 +37,12 @@ class Tag(discord.ui.Modal, title='タグ'):
         await interaction.response.send_message('エラーが発生しました', ephemeral=True)
 
 
-class DB(commands.Cog):
+class dab(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot: commands.Bot = bot
+
+    tg = Group(name='tag', description='tag-commands')
 
 
     @commands.Cog.listener()
@@ -88,12 +91,11 @@ class DB(commands.Cog):
         conn.close
 
 
-    @app_commands.command(name = "tag-create", description = "タグを作成します")
+    @tg.command(name = "tag-create", description = "タグを作成します")
     async def tag(self, interaction: discord.Interaction):
-        await interaction.response.send_message("タグを作成します..", ephemeral=True)
         await interaction.response.send_modal(Tag())
 
-    @app_commands.command(name = "tag-get", description = "タグを取得します")
+    @tg.command(name = "tag-get", description = "タグを取得します")
     @app_commands.describe(name="タグのタイトルを入力して下さい")
     async def tag(self, interaction: discord.Interaction, name: str):
         try:
@@ -111,7 +113,7 @@ class DB(commands.Cog):
             await interaction.response.send_message("タグが見つかりません </tagsearch:1052607497690681406> で名前を確認してください")
 
         
-    @app_commands.command(name = "tag-search", description = "タグのタイトル一覧を表示します")
+    @tg.command(name = "tag-search", description = "タグのタイトル一覧を表示します")
     @app_commands.describe(name="タグのタイトルを入力して下さい")
     async def tag(self, interaction: discord.Interaction):
         cur.execute("SELECT title FROM tags")
@@ -127,6 +129,6 @@ class DB(commands.Cog):
         conn.close
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(DB(bot))
+    await bot.add_cog(dab(bot))
 
 
