@@ -6,7 +6,6 @@ from discord.ext import commands
 from discord import app_commands
 from io import BytesIO
 import qrcode
-from pyzbar.pyzbar import decode
 
 
 class Image(commands.Cog):
@@ -93,17 +92,7 @@ class Image(commands.Cog):
         await ctx.send(file=discord.File("./img/code.png"))
         os.remove("./img/code.png")
 
-    @qr.command(name="read",with_app_command = True, description="QRコードを読み取ります")
-    @app_commands.rename(img="画像")    
-    @app_commands.describe(img="Qrコードを添付して下さい")
-    async def qrread(self, ctx: commands.Context, img: discord.Attachment):
-        await ctx.defer()
-
-        data = BytesIO(await img.read())
-        pfp = decode(PIL.Image.open(data))
-
-        await ctx.send(pfp[0].data.decode("utf-8"))
-
+    
     
 
 
