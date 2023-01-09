@@ -62,14 +62,19 @@ class Search(commands.Cog):
                 trans_en = translator.translate(text=reaction.message.content,  src=country.lang, dest='en')
                 await reaction.message.channel.send(trans_en.text)
 
-    @commands.hybrid_command(name="googlesearch", description="Googleで検索します(上位5件分)", with_app_command=True)    
+    @commands.hybrid_group()
+    async def search(self, ctx: commands.Context):
+        if ctx.invoked_subcommand is None:
+            await ctx.send("Search commands")
+
+    @search.command(name="google", description="Googleで検索します(上位5件分)", with_app_command=True)    
     @app_commands.describe(word="検索ワードを入力して下さい")
     async def gserch(self, ctx: commands.Context, word: str):
         kensaku = word
         for url in search(kensaku, lang="jp",num_results = 5):
             await ctx.send(url)
 
-    @commands.hybrid_command(name="search", description="インターネットの検索結果のリンクを生成します", with_app_command=True)
+    @search.command(name="web", description="インターネットの検索結果のリンクを生成します", with_app_command=True)
     @app_commands.rename(word="検索ワード")    
     @app_commands.describe(word="検索ワードを入力して下さい")
     async def isearch(self, ctx: commands.Context, *, word: str):
@@ -89,7 +94,7 @@ class Search(commands.Cog):
             ),
         )
 
-    @commands.hybrid_command(name="imagesearch", description="画像を検索します", with_app_command=True)
+    @search.command(name="image", description="画像を検索します", with_app_command=True)
     @app_commands.rename(search="検索ワード")   
     @app_commands.describe(search="検索したい画像名を入力して下さい")
     async def image(self, ctx: commands.Context, *, search: str):
@@ -106,7 +111,7 @@ class Search(commands.Cog):
         embed.set_footer(text=f"{ctx.author.name}のリクエスト")
         await ctx.send(embed=embed)
 
-    @commands.hybrid_command(name="wiki", description="wikipediaで検索します", with_app_command=True)
+    @search.command(name="wiki", description="wikipediaで検索します", with_app_command=True)
     @app_commands.rename(search="検索ワード")    
     @app_commands.describe(search="検索ワードを入力して下さい")
     async def wiki(self, ctx: commands.Context, search: str):
@@ -166,7 +171,7 @@ class Search(commands.Cog):
         except Exception as e:
             await ctx.send("error")'''    
 
-    @commands.hybrid_command(name="weather", description="天気を表示します", with_app_command=True)    
+    @search.command(name="weather", description="天気を表示します", with_app_command=True)    
     @app_commands.describe(city="地名を入力して下さい(英語)")
     async def weather(self, ctx: commands.Context, city: str):
         city_name = city

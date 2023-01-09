@@ -29,4 +29,5 @@ simpcalci==0.0.2
 jishaku==2.5.1
 psycopg2==2.9.3
 Pillow==9.1.1
-opencv-contrib-python==4.7.0.68
+pyzbar==0.1.9
+qrcode==7.3.1

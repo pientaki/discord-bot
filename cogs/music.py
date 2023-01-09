@@ -325,7 +325,7 @@ class Music(commands.Cog):
         await vc.set_filter(wavelink.Filter(equalizer=wavelink.Equalizer(name="MyOwnFilter",bands=bands)), seek=True)
         await ctx.send("ブースト開始")
 
-    @music.command(name="removeboost", description="ブースト解除します", with_app_command=True)    
+    @music.command(name="unboost", description="ブーストを解除します", with_app_command=True)    
     async def rmvboost_command(self, ctx:commands.Context):
         vc: wavelink.Player = ctx.voice_client
         await vc.set_filter(wavelink.Filter(equalizer=wavelink.Equalizer.flat()),seek=True)

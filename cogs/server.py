@@ -145,7 +145,7 @@ class Server(commands.Cog):
         f"理由: `{reason}`\n" f"期間: `{days}日{hours}時間{minutes}分{seconds}秒`\n"
         f"詳しくは実行者{ctx.author.mention}、又は{ctx.guild.owner.mention}までお問い合わせ下さい")
 
-    @commands.hybrid_command(name="removetimeout", description="メンバーのタイムアウトを解除します", with_app_command=True)
+    @commands.hybrid_command(name="untimeout", description="メンバーのタイムアウトを解除します", with_app_command=True)
     @app_commands.rename(member="メンバー", reason="理由")   
     @app_commands.describe(member="メンバーを選択して下さい")
     async def remove_timeout(self, ctx: commands.Context, member: discord.Member, reason=None):
@@ -181,7 +181,7 @@ class Server(commands.Cog):
         else:
             await member.remove_roles(role)
 
-    @commands.hybrid_command(name="removemute", description="メンバーをミュートを解除します", with_app_command=True)
+    @commands.hybrid_command(name="unmute", description="メンバーをミュートを解除します", with_app_command=True)
     @app_commands.rename(member="メンバー")    
     @app_commands.describe(member="メンバーを選択して下さい")
     async def unmute(self, ctx: commands.Context, member: discord.Member):

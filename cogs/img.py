@@ -4,9 +4,9 @@ import PIL.Image
 import discord
 from discord.ext import commands
 from discord import app_commands
-from functools import partial
 from io import BytesIO
-from typing import Union
+import qrcode
+from pyzbar.pyzbar import decode
 
 
 class Image(commands.Cog):
@@ -75,6 +75,36 @@ class Image(commands.Cog):
     
         await ctx.send(file=discord.File("./img/blur.gif"))
         os.remove("./img/blur.gif")
+
+    @commands.hybrid_group()
+    async def qr(self, ctx: commands.Context):
+        if ctx.invoked_subcommand is None:
+            await ctx.send("Qrcode commands")
+
+    @qr.command(name="create",with_app_command = True, description="QRコードを生成します")
+    @app_commands.rename(data="データ")    
+    @app_commands.describe(data="データを入力して下さい")
+    async def qr(self, ctx: commands.Context, data: str):
+        await ctx.defer()
+
+        qr_img = qrcode.make(data)
+        qr_img.save("./img/code.png")
+
+        await ctx.send(file=discord.File("./img/code.png"))
+        os.remove("./img/code.png")
+
+    @qr.command(name="read",with_app_command = True, description="QRコードを読み取ります")
+    @app_commands.rename(img="画像")    
+    @app_commands.describe(img="Qrコードを添付して下さい")
+    async def qrread(self, ctx: commands.Context, img: discord.Attachment):
+        await ctx.defer()
+
+        data = BytesIO(await img.read())
+        pfp = decode(PIL.Image.open(data))
+
+        await ctx.send(pfp[0].data.decode("utf-8"))
+
+    
 
 
 async def setup(bot: commands.Bot):
