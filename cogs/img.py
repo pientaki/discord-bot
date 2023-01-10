@@ -41,7 +41,7 @@ class Image(commands.Cog):
     @image.command(name="monochrome",with_app_command = True, description="白黒画像を生成します")
     @app_commands.rename(img="画像")    
     @app_commands.describe(img="対応フォーマットは png jpg です")
-    async def imgmono(self, ctx: commands.Context, img: discord.Attachment):
+    async def img_mono(self, ctx: commands.Context, img: discord.Attachment):
        
 
         data = BytesIO(await img.read())
@@ -57,7 +57,7 @@ class Image(commands.Cog):
     @image.command(name="gif",with_app_command = True, description="gifを生成します")
     @app_commands.rename(img="画像")    
     @app_commands.describe(img="対応フォーマットは png jpg です")
-    async def mozagif(self, ctx: commands.Context, img: discord.Attachment):
+    async def moza_gif(self, ctx: commands.Context, img: discord.Attachment):
         await ctx.defer()
        
 
@@ -83,7 +83,7 @@ class Image(commands.Cog):
     @qr.command(name="create",with_app_command = True, description="QRコードを生成します")
     @app_commands.rename(data="データ")    
     @app_commands.describe(data="データを入力して下さい")
-    async def qr(self, ctx: commands.Context, data: str):
+    async def qr_create(self, ctx: commands.Context, data: str):
         await ctx.defer()
 
         qr_img = qrcode.make(data)
