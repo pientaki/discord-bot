@@ -50,16 +50,9 @@ class SphinxObjectFileReader:
                 pos = buf.find(b'\n')
 
 class Docs(commands.Cog):
-
-    faq_entries: dict[str, str]
-    _rtfm_cache: dict[str, dict[str, str]]
     def __init__(self, bot):
-
         self.bot = bot
         
-    
-
-
     def finder(self, text, collection, *, key=None, lazy=True):
         suggestions = []
         text = str(text)
@@ -82,27 +75,20 @@ class Docs(commands.Cog):
             return [z for _, _, z in sorted(suggestions, key=sort_key)]
 
     def parse_object_inv(self, stream: SphinxObjectFileReader, url: str) -> dict[str, str]:
-        # key: URL
-        # n.b.: key doesn't have `discord` or `discord.ext.commands` namespaces
         result: dict[str, str] = {}
 
-        # first line is version info
         inv_version = stream.readline().rstrip()
 
         if inv_version != '# Sphinx inventory version 2':
             raise RuntimeError('Invalid objects.inv file version.')
 
-        # next line is "# Project: <name>"
-        # then after that is "# Version: <version>"
         projname = stream.readline().rstrip()[11:]
         version = stream.readline().rstrip()[11:]
 
-        # next line says if it's a zlib header
         line = stream.readline()
         if 'zlib' not in line:
             raise RuntimeError('Invalid objects.inv file, not z-lib compatible.')
 
-        # This code mostly comes from the Sphinx repository.
         entry_regex = re.compile(r'(?x)(.+?)\s+(\S*:\S*)\s+(-?\d+)\s+(\S+)\s+(.*)')
         for line in stream.read_compressed_lines():
             match = entry_regex.match(line.rstrip())
@@ -112,14 +98,7 @@ class Docs(commands.Cog):
             name, directive, prio, location, dispname = match.groups()
             domain, _, subdirective = directive.partition(':')
             if directive == 'py:module' and name in result:
-                # From the Sphinx Repository:
-                # due to a bug in 1.1 and below,
-                # two inventory entries are created
-                # for Python modules, and the first
-                # one is correct
                 continue
-
-            # Most documentation pages have a label
             if directive == 'std:doc':
                 subdirective = 'label'
 
@@ -187,7 +166,6 @@ class Docs(commands.Cog):
         self, interaction: discord.Interaction, current: str
     ) -> list[app_commands.Choice[str]]:
 
-        # Degenerate case: not having built caching yet
         if not hasattr(self, '_rtfm_cache'):
             await interaction.response.autocomplete([])
             await self.build_rtfm_lookup_table()
@@ -209,44 +187,40 @@ class Docs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("I'm ready!")
+        print("Doc Cog is now ready!")
 
     
-    @commands.hybrid_group(aliases=['rtfd'], fallback='stable')
-    @app_commands.guilds(discord.Object(id=902562000855502909))
+    @commands.hybrid_group(fallback='stable' , description="discord.py のドキュメントを参照します(英語版)")
+    @app_commands.describe(entity='検索するオブジェクト名')
     @app_commands.autocomplete(entity=rtfm_slash_autocomplete)
     async def rtfm(self, ctx: commands.Context, *, entity: Optional[str] = None):
         await self.do_rtfm(ctx, 'stable', entity)
 
-    @rtfm.command(name="jp", description="Gives you a documentation link for a d.py entity.", with_app_command=True)
-    @app_commands.guilds(discord.Object(id=902562000855502909))
+    @rtfm.command(name="jp", description="discord.py のドキュメントを参照します(日本語版)", with_app_command=True)
+    @app_commands.describe(entity='検索するオブジェクト名')
     @app_commands.autocomplete(entity=rtfm_slash_autocomplete)
     async def rtfm_jp(self, ctx: commands.Context, *, entity: Optional[str] = None):
-        """Gives you a documentation link for a discord.py entity (Japanese)."""
         await self.do_rtfm(ctx, 'latest-jp', entity)
 
-    @rtfm.command(name="python", description="Gives you a documentation link for a d.py entity.", with_app_command=True)
-    @app_commands.guilds(discord.Object(id=902562000855502909))
+    @rtfm.command(name="python", description="python のドキュメントを参照します(英語版)", with_app_command=True)
+    @app_commands.describe(entity='検索するオブジェクト名')
     @app_commands.autocomplete(entity=rtfm_slash_autocomplete)
-    async def rtfm_jp(self, ctx: commands.Context, *, entity: Optional[str] = None):
-        """Gives you a documentation link for a discord.py entity (Japanese)."""
+    async def rtfm_python(self, ctx: commands.Context, *, entity: Optional[str] = None):
         await self.do_rtfm(ctx, 'python', entity)
 
-    @rtfm.command(name="python-jp", description="Gives you a documentation link for a d.py entity.", with_app_command=True)
-    @app_commands.guilds(discord.Object(id=902562000855502909))
+    @rtfm.command(name="python-jp", description="python のドキュメントを参照します(日本語版)", with_app_command=True)
+    @app_commands.describe(entity='検索するオブジェクト名')
     @app_commands.autocomplete(entity=rtfm_slash_autocomplete)
-    async def rtfm_jp(self, ctx: commands.Context, *, entity: Optional[str] = None):
-        """Gives you a documentation link for a discord.py entity (Japanese)."""
+    async def rtfm_python_jp(self, ctx: commands.Context, *, entity: Optional[str] = None):
         await self.do_rtfm(ctx, 'python-jp', entity)
 
-    @rtfm.command(name="latest", description="Gives you a documentation link for a d.py entity.", with_app_command=True)
-    @app_commands.guilds(discord.Object(id=902562000855502909))
+    @rtfm.command(name="latest", description="discord.py のドキュメントを参照します(最新版)", with_app_command=True)
+    @app_commands.describe(entity='検索するオブジェクト名')
     @app_commands.autocomplete(entity=rtfm_slash_autocomplete)
-    async def rtfm_jp(self, ctx: commands.Context, *, entity: Optional[str] = None):
-        """Gives you a documentation link for a discord.py entity (Japanese)."""
+    async def rtfm_master(self, ctx: commands.Context, *, entity: Optional[str] = None):
         await self.do_rtfm(ctx, 'latest', entity)
 
     
 
 async def setup(bot: commands.Bot):  
-    await bot.add_cog(Docs(bot))  
+    await bot.add_cog(Docs(bot))
