@@ -74,8 +74,8 @@ class Docs(commands.Cog):
         else:
             return [z for _, _, z in sorted(suggestions, key=sort_key)]
 
-    def parse_object_inv(self, stream: SphinxObjectFileReader, url: str) -> dict[str, str]:
-        result: dict[str, str] = {}
+    def parse_object_inv(self, stream: SphinxObjectFileReader, url: str):
+        result = {}
 
         inv_version = stream.readline().rstrip()
 
@@ -116,7 +116,7 @@ class Docs(commands.Cog):
         return result
 
     async def build_rtfm_lookup_table(self):
-        cache: dict[str, dict[str, str]] = {}
+        cache = {}
         for key, page in RTFM_PAGE_TYPES.items():
             cache[key] = {}
             async with aiohttp.ClientSession() as session:
