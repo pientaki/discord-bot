@@ -163,8 +163,7 @@ class Docs(commands.Cog):
 
 
     async def rtfm_slash_autocomplete(
-        self, interaction: discord.Interaction, current: str
-    ) -> list[app_commands.Choice[str]]:
+        self, interaction: discord.Interaction, current: str):
 
         if not hasattr(self, '_rtfm_cache'):
             await interaction.response.autocomplete([])
