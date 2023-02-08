@@ -1,4 +1,4 @@
-import psycopg2
+import asyncpg
 from discord import app_commands
 from discord.app_commands import Group
 from discord.ext import commands
@@ -7,9 +7,8 @@ import discord
 
 pw = os.environ["dbpw"]
 host = os.environ["host"]
-dsn = f"port=5432 dbname=postgres host={host} user=postgres password={pw}"
-conn = psycopg2.connect(dsn)
-cur = conn.cursor()
+dsn = f"postgresql://postgres:{pw}@{host}:5432/postgres"
+
 
 class Tag(discord.ui.Modal, title='タグ'):
     name = discord.ui.TextInput(
@@ -18,7 +17,7 @@ class Tag(discord.ui.Modal, title='タグ'):
     )
     
     content = discord.ui.TextInput(
-        label='内容',
+        label='内容(2000字以内)',
         style=discord.TextStyle.long,
         placeholder='タグの内容を入力して下さい',
         required=False,
@@ -26,11 +25,10 @@ class Tag(discord.ui.Modal, title='タグ'):
     )
 
     async def on_submit(self, interaction: discord.Interaction):
-        sql = "INSERT INTO tags (title, content) VALUES (%s, %s)"
-        cur.execute(sql, (self.name.value, self.content.value))
+        conn = await asyncpg.connect(dsn)
+        await conn.execute("INSERT INTO tags (title, content) VALUES ($1, $2)", self.name.value, self.content.value)
         await interaction.response.send_message(f'タグ ***{self.name.value}*** が正常に作成されました', ephemeral=True)
-        cur.close
-        conn.close
+        await conn.close()
 
 
     async def on_error(self, interaction: discord.Interaction, error: Exception) -> None:
@@ -51,44 +49,38 @@ class dab(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        conn = await asyncpg.connect(dsn)
         if message.author.bot:
             return
 
-        cur.execute("SELECT * FROM app_user WHERE userid= %s AND guild = %s", (message.author.id, message.guild.id,))
-        data=cur.fetchone()
+        data= await conn.fetchrow("SELECT * FROM app_user WHERE userid= $1 AND guild = $2", message.author.id, message.guild.id)
 
         if data is None:
-            cur.execute("INSERT INTO app_user VALUES (%s, %s, %s, %s)",(message.author.id, 1, 0, message.guild.id,))
-            conn.commit()
+            await conn.execute("INSERT INTO app_user VALUES ($1, $2, $3, $4)",message.author.id, 1, 0, message.guild.id)
             return
-        cur.execute("UPDATE app_user set xp=%s WHERE userid=%s AND guild = %s",(data[2]+1, message.author.id, message.guild.id,))
-        conn.commit()
-        cur.execute("SELECT * FROM app_user WHERE userid=%s AND guild = %s", (message.author.id, message.guild.id,))
-        data=cur.fetchone()
+        await conn.execute("UPDATE app_user set xp=$1 WHERE userid=$2 AND guild = $3",data[2]+1, message.author.id, message.guild.id)
+
         if data[2] >= data[1]*5:
-            cur.execute("UPDATE app_user set level=%s,xp=%s WHERE userid=%s AND guild = %s",(data[1]+1,0,message.author.id, message.guild.id,))
-            conn.commit()
+            await conn.execute("UPDATE app_user set level=$1,xp=$2 WHERE userid=$3 AND guild = $4",data[1]+1,0,message.author.id, message.guild.id)
             await message.channel.send(f"{message.author.mention}がレベル{data[1]+1}になりました")
-        cur.close
-        conn.close
+        await conn.close()
 
     @commands.hybrid_command(name="level", description="ユーザーのレベルを表示します", with_app_command=True)
     @app_commands.rename(member="メンバー")    
     @app_commands.describe(member="メンバーを選択して下さい")
     async def level(self, ctx: commands.Context, member:discord.User=None):
+        conn = await asyncpg.connect(dsn)
         guild = ctx.guild
         if member is None:
             user=ctx.author
         else:
             user=member
-        cur.execute("SELECT * FROM app_user WHERE userid=%s AND guild = %s", (user.id, guild.id,))
-        data=cur.fetchone()
+        data = await conn.fetchrow("SELECT * FROM app_user WHERE userid= $1 AND guild = $2", user.id, guild.id)
         if data is None:
             await ctx.send("ユーザーが登録されていません")
         e=discord.Embed(title=f"{user}のランク", description=f"Lv.{data[1]}", color=discord.Colour.gold())
         await ctx.send(embed=e)
-        cur.close
-        conn.close
+        await conn.close()
 
 
     @tg.command(name = "create", description = "タグを作成します")
@@ -98,34 +90,29 @@ class dab(commands.Cog):
     @tg.command(name = "get", description = "タグを取得します")
     @app_commands.describe(name="タグのタイトルを入力して下さい")
     async def tag(self, interaction: discord.Interaction, name: str):
-        try:
-        
-            cur.execute("SELECT content FROM tags WHERE title= %s ", (name,))
-            data=cur.fetchone()
-
+        conn = await asyncpg.connect(dsn)
+        try:        
+            data = await conn.fetchrow("SELECT content FROM tags WHERE title= $1 ", name)
             await interaction.response.send_message(data[0])
 
-            cur.close
-            conn.close
+            await conn.close()
 
 
         except Exception:
-            await interaction.response.send_message("タグが見つかりません </tagsearch:1052607497690681406> で名前を確認してください")
+            await interaction.response.send_message("タグが見つかりません </tag search:1052607497690681404> で名前を確認してください")
 
         
     @tg.command(name = "search", description = "タグのタイトル一覧を表示します")
     async def tag(self, interaction: discord.Interaction):
-        cur.execute("SELECT title FROM tags")
-        data = cur.fetchall()
+        conn = await asyncpg.connect(dsn)
+        data = await conn.fetch("SELECT title FROM tags")
         result_1d = [row[0] for row in data]
         datafix = '\n'.join(result_1d)
 
         embed = discord.Embed(title="タグ一覧", description=datafix, color=discord.Colour.gold())
 
         await interaction.response.send_message(embed=embed)
-
-        cur.close
-        conn.close
+        await conn.close()
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(dab(bot))
