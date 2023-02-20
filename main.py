@@ -82,24 +82,6 @@ async def help_select(ctx: commands.Context):
     view = DropdownView()
     await ctx.send(embed=helpembed, view=view)
 
-bot.sniped_messages = {}
-
-@bot.event
-async def on_message_delete(message):
-    bot.sniped_messages[message.guild.id] = (message.content, message.author, message.channel.name, message.created_at)
-
-@bot.hybrid_command(name = "snipe", with_app_command = True, description = "最新の削除されたメッセージを復元")
-async def snipe(ctx: commands.Context):
-    try:
-        contents, author, channel_name, time = bot.sniped_messages[ctx.guild.id]        
-    except:
-        await ctx.send("削除されたメッセージが見つかりません")
-        return
-    embed = discord.Embed(description=contents, color=discord.Color.purple(), timestamp=time)
-    embed.set_author(name=f"{author.name}#{author.discriminator}", icon_url=author.avatar)
-    embed.set_footer(text=f"#{channel_name}")
-    await ctx.send(embed=embed)
-
 
 '''
 @bot.tree.command(name="sync", description="スラッシュコマンド登録,owner only")

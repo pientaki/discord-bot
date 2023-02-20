@@ -30,7 +30,7 @@ MODEBD.add_field(name="mute ＜メンバー＞ ＜理由＞", value="メンバ�
 MODEBD.add_field(name="removemute ＜メンバー＞ ＜理由＞", value="メンバーのミュートを解除します", inline=False)
 MODEBD.add_field(name="timeout ＜メンバー＞ ＜理由＞ ＜日数＞ ＜時間＞ ＜分＞ ＜秒＞", value="メンバーをタイムアウトします", inline=False)
 MODEBD.add_field(name="removetimeout ＜メンバー＞", value="メンバーのタイムアウトを解除します", inline=False)
-MODEBD.add_field(name="clear ＜削除件数＞", value="送信したメッセージを消去します", inline=False)
+#MODEBD.add_field(name="clear ＜削除件数＞", value="送信したメッセージを消去します", inline=False)
 
 SVEBD = discord.Embed(title="**<:server:1037738456195006524>  サーバー系コマンド**",color=discord.Color.blurple())
 SVEBD.add_field(name="server", value="サーバー情報を表示します", inline=False)

@@ -4,6 +4,7 @@ from discord.app_commands import Group
 from discord.ext import commands
 import os
 import discord
+import datetime
 
 pw = os.environ["dbpw"]
 host = os.environ["host"]
@@ -113,6 +114,42 @@ class dab(commands.Cog):
 
         await interaction.response.send_message(embed=embed)
         await conn.close()
+
+    @commands.hybrid_command(name="deleted-message", description="削除されたメッセージ一覧を表示します", with_app_command=True)
+    async def snipe(self, ctx: commands.Context, member: discord.Member):
+        guild = ctx.guild
+        conn = await asyncpg.connect(dsn)
+        try:
+            data = await conn.fetch("SELECT content FROM snipe WHERE userid = $1 AND guild = $2", member.id, guild.id)
+            data2 = await conn.fetch("SELECT time FROM snipe WHERE userid = $1 AND guild = $2", member.id, guild.id)
+            result_1d = [row[0] for row in data]
+            result2_1d = [row[0] for row in data2]
+            embed = discord.Embed(title="削除済メッセージ", color=discord.Color.red())
+            embed.set_author(name=f"{member.name}#{member.discriminator}", icon_url=member.avatar)
+
+            for (content, time) in zip(result_1d, result2_1d):
+                embed.add_field(name=discord.utils.format_dt(time), value=content)
+            
+            await ctx.send(embed = embed)
+
+            await conn.close()
+        
+                
+        except Exception as e:
+            await ctx.send(e)
+            return
+        
+    @commands.Cog.listener()
+    async def on_message_delete(self, message):
+        conn = await asyncpg.connect(dsn)
+        time = message.created_at + datetime.timedelta(hours= 9) 
+        
+        await conn.execute("INSERT INTO snipe (content, userid, guild, time) VALUES ($1, $2, $3, $4)", message.content, message.author.id, message.guild.id,  time)
+        await conn.close()
+
+
+
+    
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(dab(bot))

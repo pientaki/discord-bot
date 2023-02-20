@@ -192,6 +192,8 @@ class Server(commands.Cog):
         await ctx.send(embed=embed)
         await member.send(f"あなたの `{ctx.guild.name}` でのミュートは解除されました")
 
+    '''
+
     @commands.hybrid_command(name="clear", description="送信したメッセージを消去します", with_app_command=True)
     @app_commands.rename(amount="削除件数")    
     @app_commands.describe(amount="削除したい件数を入力して下さい")
@@ -199,6 +201,8 @@ class Server(commands.Cog):
         await ctx.send(f"メッセージが{amount}件分削除されます")
         await asyncio.sleep(3)
         await ctx.channel.purge(limit=amount)
+
+    '''
         
     @commands.hybrid_command(name="ping", description="botのping値を測定します", with_app_command=True)    
     async def ping(self, ctx: commands.Context):
