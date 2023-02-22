@@ -20,6 +20,29 @@ g_api_key = os.environ["g_api_key"]
 weather_api_key = os.environ["weather_api_key"]
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
+class Wikiview(discord.ui.View):
+    def __init__(self, url):
+        super().__init__()
+        
+        url = url
+        self.add_item(discord.ui.Button(label='リンク', url=url))
+
+class Googleview(discord.ui.View):
+    def __init__(self, word):
+        super().__init__()
+
+        param = parse.urlencode({"q": word})
+        
+        self.add_item(discord.ui.Button(
+                    label="Google", url=f"https://www.google.com/search?{param}"
+                ),
+                discord.ui.Button(
+                    label="Bing", url=f"https://www.bing.com/search?{param}"
+                ),
+                discord.ui.Button(
+                    label="DuckDuckGo", url=f"https://www.duckduckgo.com/?{param}"
+                ))
+
 
 
 class Search(commands.Cog):
@@ -78,21 +101,7 @@ class Search(commands.Cog):
     @app_commands.rename(word="検索ワード")    
     @app_commands.describe(word="検索ワードを入力して下さい")
     async def isearch(self, ctx: commands.Context, *, word: str):
-        param = parse.urlencode({"q": word})
-        await ctx.send(
-            f" `{word}` についての検索結果は以下の通りです。",
-            view=discord.ui.View(
-                discord.ui.Button(
-                    label="Google", url=f"https://www.google.com/search?{param}"
-                ),
-                discord.ui.Button(
-                    label="Bing", url=f"https://www.bing.com/search?{param}"
-                ),
-                discord.ui.Button(
-                    label="DuckDuckGo", url=f"https://www.duckduckgo.com/?{param}"
-                ),
-            ),
-        )
+        await ctx.send(f" `{word}` についての検索結果は以下の通りです。", view=Googleview(word))
 
     @search.command(name="image", description="画像を検索します", with_app_command=True)
     @app_commands.rename(search="検索ワード")   
@@ -115,12 +124,15 @@ class Search(commands.Cog):
     @app_commands.rename(search="検索ワード")    
     @app_commands.describe(search="検索ワードを入力して下さい")
     async def wiki(self, ctx: commands.Context, search: str):
+        await ctx.defer()
         wikipedia.set_lang("ja")
+        wi = wikipedia.page(search)
+        url = wi.url
         try:
             embed = discord.Embed(title=f"{search}")
             embed.add_field(name="概要", value=wikipedia.summary(search))
             embed.set_thumbnail(url="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Wikipedia-logo-v2-en.svg/1784px-Wikipedia-logo-v2-en.svg.png")
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, view=Wikiview(url))
         except wikipedia.exceptions.DisambiguationError as e:
             embed = discord.Embed(title="検索失敗", description="下の候補から選んで下さい")
             embed.add_field(name="候補", value=e)
