@@ -27,23 +27,6 @@ class Wikiview(discord.ui.View):
         url = url
         self.add_item(discord.ui.Button(label='リンク', url=url))
 
-class Googleview(discord.ui.View):
-    def __init__(self, word):
-        super().__init__()
-
-        param = parse.urlencode({"q": word})
-        
-        self.add_item(discord.ui.Button(
-                    label="Google", url=f"https://www.google.com/search?{param}"
-                ),
-                discord.ui.Button(
-                    label="Bing", url=f"https://www.bing.com/search?{param}"
-                ),
-                discord.ui.Button(
-                    label="DuckDuckGo", url=f"https://www.duckduckgo.com/?{param}"
-                ))
-
-
 
 class Search(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -96,12 +79,6 @@ class Search(commands.Cog):
         kensaku = word
         for url in search(kensaku, lang="jp",num_results = 5):
             await ctx.send(url)
-
-    @search.command(name="web", description="インターネットの検索結果のリンクを生成します", with_app_command=True)
-    @app_commands.rename(word="検索ワード")    
-    @app_commands.describe(word="検索ワードを入力して下さい")
-    async def isearch(self, ctx: commands.Context, *, word: str):
-        await ctx.send(f" `{word}` についての検索結果は以下の通りです。", view=Googleview(word))
 
     @search.command(name="image", description="画像を検索します", with_app_command=True)
     @app_commands.rename(search="検索ワード")   

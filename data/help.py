@@ -16,7 +16,6 @@ MUSICEBD.add_field(name="unboost", value="ブーストを解除します", inlin
 CONVEBD = discord.Embed(title="**:mag_right:  便利系コマンド**",color=discord.Color.blurple())
 CONVEBD.add_field(name="translate ＜翻訳言語＞ ＜テキスト＞", value="翻訳します", inline=False)
 CONVEBD.add_field(name="search google ＜検索ワード＞", value="Googleで検索します(上位5件分)", inline=False)
-CONVEBD.add_field(name="search web ＜検索ワード＞", value="インターネットの検索結果のリンクを生成します", inline=False)
 CONVEBD.add_field(name="search image ＜検索ワード＞", value="画像を検索します", inline=False)
 CONVEBD.add_field(name="search wiki ＜検索ワード＞", value="Wikipediaで検索します", inline=False)
 CONVEBD.add_field(name="search weather ＜地名＞", value="天気を検索します", inline=False)
