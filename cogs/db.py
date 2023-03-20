@@ -142,7 +142,7 @@ class dab(commands.Cog):
     @commands.Cog.listener()
     async def on_message_delete(self, message):
         conn = await asyncpg.connect(dsn)
-        time = message.created_at + datetime.timedelta(hours= 9) 
+        time = message.created_at 
         
         await conn.execute("INSERT INTO snipe (content, userid, guild, time) VALUES ($1, $2, $3, $4)", message.content, message.author.id, message.guild.id,  time)
         await conn.close()
