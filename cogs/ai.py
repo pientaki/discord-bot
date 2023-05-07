@@ -3,7 +3,7 @@ import random
 
 import discord
 import os
-import requests
+import aiohttp
 from discord import app_commands
 from discord.ext import commands
 from janome.tokenizer import Tokenizer
@@ -99,16 +99,17 @@ class Ai(commands.Cog):
     async def on_message(self, message):
         if message.attachments:
             pass
-        elif self.bot.user in message.mentions:       
+        elif self.bot.user in message.mentions:
             words = message.content
             rewords = words[22:]
             headers = {"Content-Type": "application/json"}
             payload = {"api_key":mebo_api_key,"agent_id":agent_id,"utterance": rewords,"uid":"mebo.testtesttest001"}
-            url = 'https://api-mebo.dev/api'
-            r = requests.post(url=url, headers=headers, data=json.dumps(payload))
-            text = r.text
-            data = json.loads(text)
-            await message.channel.send('{}'.format(data['bestResponse']['utterance']))
+            url = 'https://api-mebo.dev/api' 
+            async with aiohttp.ClientSession() as cs:
+                async with cs.post(url=url, headers=headers, data=json.dumps(payload)) as r:              
+                    text = r.text
+                    data = json.loads(text)
+                    await message.channel.send('{}'.format(data['bestResponse']['utterance']))
 
     @commands.hybrid_command(name="markov", description="マルコフ連鎖で文章を生成します", with_app_command=True)
     @app_commands.rename(text="テキスト")   
