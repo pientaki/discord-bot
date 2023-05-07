@@ -108,8 +108,8 @@ class Ai(commands.Cog):
             async with aiohttp.ClientSession() as cs:
                 async with cs.post(url=url, headers=headers, data=json.dumps(payload)) as r:              
                     t = r.text
-                    data = json.loads(str(t))
                     print(t)
+                    data = json.loads(str(t))
                     await message.channel.send('{}'.format(data['bestResponse']['utterance']))
 
     @commands.hybrid_command(name="markov", description="マルコフ連鎖で文章を生成します", with_app_command=True)
