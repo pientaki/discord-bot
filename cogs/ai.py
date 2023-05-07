@@ -107,9 +107,9 @@ class Ai(commands.Cog):
             url = 'https://api-mebo.dev/api' 
             async with aiohttp.ClientSession() as cs:
                 async with cs.post(url=url, headers=headers, data=json.dumps(payload)) as r:              
-                    t = r.text
+                    t = await r.text()
                     print(t)
-                    data = json.loads(str(t))
+                    data = json.loads(t)
                     await message.channel.send('{}'.format(data['bestResponse']['utterance']))
 
     @commands.hybrid_command(name="markov", description="マルコフ連鎖で文章を生成します", with_app_command=True)
