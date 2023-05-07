@@ -61,6 +61,6 @@ FUNEBD.add_field(name="kodane", value="フリッツ王から褒美をもらえ�
 FUNEBD.add_field(name="markov", value="マルコフ連鎖で文章を生成します", inline=False)
 
 SUBEBD = discord.Embed(title="**🕶️ その他**",color=discord.Color.blurple())
-SUBEBD.add_field(name="メンション ＜テキスト＞", value="ソロウ君とおしゃべりできます", inline=False)
+SUBEBD.add_field(name="メンション ＜テキスト＞", value="chatgptを搭載したソロウ君とおしゃべりできます", inline=False)
 SUBEBD.add_field(name="リアクション ＜:flag_us:＞", value="メッセージを英語に翻訳します", inline=False)
 SUBEBD.add_field(name="リアクション ＜:flag_in:＞", value="メッセージをヒンディー語に翻訳します", inline=False)

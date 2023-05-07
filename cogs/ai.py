@@ -108,7 +108,6 @@ class Ai(commands.Cog):
             async with aiohttp.ClientSession() as cs:
                 async with cs.post(url=url, headers=headers, data=json.dumps(payload)) as r:              
                     t = await r.text()
-                    print(t)
                     data = json.loads(t)
                     await message.channel.send('{}'.format(data['bestResponse']['utterance']))
 
