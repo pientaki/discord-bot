@@ -1,6 +1,7 @@
 import os
 import pathlib
 from enum import Enum
+import aiohttp
 
 import discord
 import requests
