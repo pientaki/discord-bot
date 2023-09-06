@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands, tasks
 from jishaku.features.python import PythonFeature
 from data.help import MUSICEBD, CONVEBD, MODEBD, SVEBD, FUNEBD, GAMEEBD, SUBEBD
+from keep_alive import keep_alive
 
 status=cycle(["/help","Apex","Among us","Rogue Company"])
 prefixes = ["!","?"]
@@ -89,6 +90,6 @@ async def treesync(interaction: discord.Interaction):
     await bot.tree.sync()
     await interaction.response.send_message("スラッシュコマンドを登録しました", ephemeral=True)
 '''
-
+keep_alive()
 bot.run(os.environ["token"])
 
