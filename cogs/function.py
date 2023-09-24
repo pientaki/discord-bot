@@ -76,6 +76,7 @@ class Search(commands.Cog):
     @search.command(name="google", description="Googleで検索します(上位5件分)", with_app_command=True)    
     @app_commands.describe(word="検索ワードを入力して下さい")
     async def gserch(self, ctx: commands.Context, word: str):
+        await ctx.defer()
         kensaku = word
         for url in search(kensaku, lang="jp",num_results = 5):
             await ctx.send(url)
@@ -84,6 +85,7 @@ class Search(commands.Cog):
     @app_commands.rename(search="検索ワード")   
     @app_commands.describe(search="検索したい画像名を入力して下さい")
     async def image(self, ctx: commands.Context, *, search: str):
+        await ctx.defer()
         t_delta = datetime.timedelta(hours=9)
         JST = datetime.timezone(t_delta, 'JST')
         ran = random.randint(0, 9)
