@@ -25,6 +25,7 @@ class Image(commands.Cog):
     @app_commands.rename(member="メンバー")    
     @app_commands.describe(member="メンバーを選択して下さい")
     async def mono(self, ctx: commands.Context, member: discord.Member = None):
+        await ctx.defer()
         if member == None:
             member = ctx.author
 
@@ -42,6 +43,7 @@ class Image(commands.Cog):
     @app_commands.rename(img="画像")    
     @app_commands.describe(img="対応フォーマットは png jpg です")
     async def img_mono(self, ctx: commands.Context, img: discord.Attachment):
+        await ctx.defer()
        
 
         data = BytesIO(await img.read())

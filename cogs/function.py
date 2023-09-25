@@ -39,6 +39,7 @@ class Search(commands.Cog):
     @commands.hybrid_command(name="translate", description="翻訳します", with_app_command=True)    
     @app_commands.describe(lang_to="翻訳したい言語を選択して下さい", text = "翻訳したい内容を入力して下さい")
     async def translate(self, ctx: commands.Context, lang_to: lg, text: str):
+        await ctx.defer()
         lang_to = lang_to.lower()
         if lang_to not in googletrans.LANGUAGES and lang_to not in googletrans.LANGCODES:
             raise commands.BadArgument("!!ERROR!!")
